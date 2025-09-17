@@ -297,7 +297,7 @@ export default function App() {
                 </p>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <img src="/assets/about-photo.png" alt="About" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, border: '1px solid #374151' }} />
+                <img src="/assets/about-irish-dreamin.jpeg" alt="Irish Dreamin Presentation" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, border: '1px solid #374151' }} />
               </div>
             </div>
           </section>

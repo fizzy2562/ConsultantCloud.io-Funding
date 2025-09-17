@@ -198,6 +198,14 @@ const colors = {
   it: '#8b5cf6',          // Purple
   // ... customize your brand colors
 }
+
+### Feature Flags
+
+- `VITE_CHART_VARIANT` (build time): `chartjs` (default) or `recharts`.
+- URL override (runtime): add `?chart=chartjs` or `?chart=recharts` to the URL.
+- LocalStorage override (runtime): set `localStorage.chartVariant = 'chartjs'` or `'recharts'` in DevTools.
+
+Precedence: URL param → localStorage → env → default.
 ```
 
 ### **Chart Configuration**

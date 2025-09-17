@@ -16,6 +16,8 @@ import {
   Legend,
   ResponsiveContainer
 } from 'recharts'
+import ModernPieChart from './components/ModernPieChart.jsx'
+import { getChartVariant } from './config.js'
 import { parseWorkbook } from './lib/parsePlan.js'
 
 export default function App() {
@@ -423,38 +425,42 @@ export default function App() {
                 </div>
               </div>
 
-              {/* User Distribution */}
-              <div style={{
-                background: 'linear-gradient(to bottom right, #374151, #1F2937)',
-                border: '1px solid #374151',
-                borderRadius: '16px',
-                padding: '24px',
-                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-              }}>
-                <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '24px', color: 'white', margin: '0 0 24px 0' }}>
-                  User Distribution
-                </h3>
-                <div style={{ width: '100%', height: '300px' }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={data.userDistribution}
-                        cx="50%"
-                        cy="50%"
-                        outerRadius={80}
-                        dataKey="value"
-                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        labelLine={false}
-                      >
-                        {data.userDistribution.map((entry, index) => (
-                          <Cell key={`cell-${index}`} fill={entry.color} />
-                        ))}
-                      </Pie>
-                      <Tooltip formatter={(value) => [formatNumber(value), '']} />
-                    </PieChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
+          {/* User Distribution (feature-flagged) */}
+          <div style={{
+            background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+            border: '1px solid #374151',
+            borderRadius: '16px',
+            padding: '24px',
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+          }}>
+            <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '24px', color: 'white', margin: '0 0 24px 0' }}>
+              User Distribution
+            </h3>
+            <div style={{ width: '100%', height: '300px' }}>
+              {getChartVariant() === 'chartjs' ? (
+                <ModernPieChart data={data.userDistribution} />
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={data.userDistribution}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {data.userDistribution.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [formatNumber(value), '']} />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
+            </div>
+          </div>
             </div>
 
             {/* Success message is now only printed to console */}

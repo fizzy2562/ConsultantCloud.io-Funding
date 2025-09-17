@@ -305,13 +305,13 @@ export default function App() {
               gap: '24px', 
               marginBottom: '48px' 
             }}>
-              {[
-                { title: 'Total Revenue Projected', value: formatCurrency(data.totalRevenue), color: '#34D399' },
-                { title: 'Total Expenses', value: formatCurrency(data.totalExpenses), color: '#60A5FA' },
-                { title: 'Net Cash Flow', value: formatCurrency(data.totalRevenue - data.totalExpenses), color: '#FB923C' },
-                { title: 'Total Users (Dec 2028)', value: formatNumber(data.totalUsers), color: '#34D399' }
-              ].map((metric, index) => (
-                <div key={index} style={{
+          {[
+            { title: 'Total Revenue (36 months)', value: formatCurrency(data.totalRevenue), color: '#34D399' },
+            { title: 'Total Expenses (36 months)', value: formatCurrency(data.totalExpenses), color: '#60A5FA' },
+            { title: 'Net Cash Flow (36 months)', value: formatCurrency(data.totalRevenue - data.totalExpenses), color: '#FB923C' },
+            { title: 'Total Users (Dec 2028)', value: formatNumber(data.totalUsers), color: '#34D399' }
+          ].map((metric, index) => (
+            <div key={index} style={{
                   background: 'linear-gradient(to bottom right, #374151, #1F2937)',
                   border: '1px solid #374151',
                   borderRadius: '16px',
@@ -473,10 +473,14 @@ export default function App() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data.financialSheetRows?.slice(1).map((row, rIdx) => (
-                    <tr key={rIdx}>
-                      {row.map((cell, cIdx) => (
-                        <td key={cIdx} style={{
+                  {data.financialSheetRows?.slice(1).map((row, rIdx) => {
+                    const rowLabel = row?.[0] ?? ''
+                    const isUserRow = typeof rowLabel === 'string' && rowLabel.toLowerCase().includes('users')
+                    const isCurrencyRow = typeof rowLabel === 'string' && (rowLabel.includes('€') || /revenue|marketing|wage|supplier|it/i.test(rowLabel))
+                    return (
+                      <tr key={rIdx}>
+                        {row.map((cell, cIdx) => (
+                          <td key={cIdx} style={{
                           position: cIdx === 0 ? 'sticky' : 'static',
                           left: cIdx === 0 ? 0 : 'auto',
                           background: cIdx === 0 ? '#111827' : 'transparent',
@@ -486,11 +490,16 @@ export default function App() {
                           textAlign: cIdx === 0 ? 'left' : 'right',
                           fontVariantNumeric: 'tabular-nums'
                         }}>
-                          {cIdx === 0 ? (cell ?? '') : (typeof cell === 'number' ? formatCurrency(cell) : (cell ?? ''))}
+                          {cIdx === 0
+                            ? (cell ?? '')
+                            : (typeof cell === 'number'
+                                ? (isUserRow ? formatNumber(cell) : (isCurrencyRow ? formatCurrency(cell) : cell.toLocaleString()))
+                                : (cell ?? ''))}
                         </td>
-                      ))}
-                    </tr>
-                  ))}
+                        ))}
+                      </tr>
+                    )
+                  })}
                 </tbody>
               </table>
             </div>

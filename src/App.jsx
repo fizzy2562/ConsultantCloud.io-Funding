@@ -6,6 +6,9 @@ import {
   Bar,
   LineChart,
   Line,
+  PieChart,
+  Pie,
+  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -14,6 +17,7 @@ import {
   ResponsiveContainer
 } from 'recharts'
 import ModernPieChart from './components/ModernPieChart.jsx'
+import { getChartVariant } from './config.js'
 import { parseWorkbook } from './lib/parsePlan.js'
 
 export default function App() {
@@ -421,7 +425,7 @@ export default function App() {
                 </div>
               </div>
 
-          {/* User Distribution (Chart.js Doughnut) */}
+          {/* User Distribution (feature-flagged) */}
           <div style={{
             background: 'linear-gradient(to bottom right, #374151, #1F2937)',
             border: '1px solid #374151',
@@ -433,7 +437,28 @@ export default function App() {
               User Distribution
             </h3>
             <div style={{ width: '100%', height: '300px' }}>
-              <ModernPieChart data={data.userDistribution} />
+              {getChartVariant() === 'chartjs' ? (
+                <ModernPieChart data={data.userDistribution} />
+              ) : (
+                <ResponsiveContainer width="100%" height="100%">
+                  <PieChart>
+                    <Pie
+                      data={data.userDistribution}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      dataKey="value"
+                      label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                      labelLine={false}
+                    >
+                      {data.userDistribution.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [formatNumber(value), '']} />
+                  </PieChart>
+                </ResponsiveContainer>
+              )}
             </div>
           </div>
             </div>

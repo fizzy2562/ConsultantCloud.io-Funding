@@ -114,10 +114,12 @@ export async function parseWorkbook(url) {
       }
     }
 
-    return { months, users, monthly, metrics }
+    // expose full sheet rows for a detailed UI table
+    const financialSheetRows = rows
+
+    return { months, users, monthly, metrics, financialSheetRows }
   } catch (error) {
     console.error('Error parsing workbook:', error)
     throw error
   }
 }
-

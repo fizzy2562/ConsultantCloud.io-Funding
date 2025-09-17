@@ -84,7 +84,9 @@ export default function App() {
           finalCash: parsedData.monthly[parsedData.monthly.length - 1]?.cash || 0,
           totalUsers: (parsedData.users[parsedData.users.length - 1]?.['Free Users'] || 0) + 
                      (parsedData.users[parsedData.users.length - 1]?.['Freemium Users'] || 0) + 
-                     (parsedData.users[parsedData.users.length - 1]?.['Enterprise Users'] || 0)
+                     (parsedData.users[parsedData.users.length - 1]?.['Enterprise Users'] || 0),
+          // full sheet for financials tab
+          financialSheetRows: parsedData.financialSheetRows || []
         }
         
         setData(transformedData)
@@ -277,7 +279,8 @@ export default function App() {
           </div>
         )}
 
-        {/* Hero Section */}
+        {/* Hero Section */
+        }
         <section style={{ textAlign: 'center', padding: '48px 0', marginBottom: '48px' }}>
           <h1 style={{
             fontSize: '60px',
@@ -293,146 +296,206 @@ export default function App() {
           <p style={{ fontSize: '20px', color: '#9CA3AF', margin: 0 }}>36-Month Financial Planning & Analysis</p>
         </section>
 
-        {/* Metrics Grid */}
-        <section style={{ 
-          display: 'grid', 
-          gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
-          gap: '24px', 
-          marginBottom: '48px' 
-        }}>
-          {[
-            { title: 'Total Revenue Projected', value: formatCurrency(data.totalRevenue), color: '#34D399' },
-            { title: 'Total Expenses', value: formatCurrency(data.totalExpenses), color: '#60A5FA' },
-            { title: 'Net Cash Flow', value: formatCurrency(data.totalRevenue - data.totalExpenses), color: '#FB923C' },
-            { title: 'Total Users (Dec 2028)', value: formatNumber(data.totalUsers), color: '#34D399' }
-          ].map((metric, index) => (
-            <div key={index} style={{
-              background: 'linear-gradient(to bottom right, #374151, #1F2937)',
-              border: '1px solid #374151',
-              borderRadius: '16px',
-              padding: '24px',
-              boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
-              transition: 'all 0.3s ease',
-              position: 'relative',
-              overflow: 'hidden'
+        {activeTab === 'overview' && (
+          <>
+            {/* Metrics Grid */}
+            <section style={{ 
+              display: 'grid', 
+              gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', 
+              gap: '24px', 
+              marginBottom: '48px' 
             }}>
+              {[
+                { title: 'Total Revenue Projected', value: formatCurrency(data.totalRevenue), color: '#34D399' },
+                { title: 'Total Expenses', value: formatCurrency(data.totalExpenses), color: '#60A5FA' },
+                { title: 'Net Cash Flow', value: formatCurrency(data.totalRevenue - data.totalExpenses), color: '#FB923C' },
+                { title: 'Total Users (Dec 2028)', value: formatNumber(data.totalUsers), color: '#34D399' }
+              ].map((metric, index) => (
+                <div key={index} style={{
+                  background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+                  border: '1px solid #374151',
+                  borderRadius: '16px',
+                  padding: '24px',
+                  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+                  transition: 'all 0.3s ease',
+                  position: 'relative',
+                  overflow: 'hidden'
+                }}>
+                  <div style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    height: '4px',
+                    background: 'linear-gradient(to right, #3B82F6, #10B981)'
+                  }}></div>
+                  <div style={{ fontSize: '32px', fontWeight: 'bold', color: metric.color, marginBottom: '8px' }}>
+                    {metric.value}
+                  </div>
+                  <div style={{ color: '#9CA3AF', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    {metric.title}
+                  </div>
+                </div>
+              ))}
+            </section>
+
+            {/* Charts Section */}
+            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', marginBottom: '48px' }}>
+              {/* Revenue Chart */}
               <div style={{
-                position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                height: '4px',
-                background: 'linear-gradient(to right, #3B82F6, #10B981)'
-              }}></div>
-              <div style={{ fontSize: '32px', fontWeight: 'bold', color: metric.color, marginBottom: '8px' }}>
-                {metric.value}
+                background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+                border: '1px solid #374151',
+                borderRadius: '16px',
+                padding: '24px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '24px', color: 'white', margin: '0 0 24px 0' }}>
+                  Revenue & Cash Flow Trends
+                </h3>
+                <div style={{ width: '100%', height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <AreaChart data={data.revenueData.slice(0, 12)}>
+                      <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                      <XAxis dataKey="month" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
+                      <YAxis tick={{ fill: '#9CA3AF', fontSize: 12 }} />
+                      <Tooltip 
+                        contentStyle={{ 
+                          backgroundColor: '#1F2937', 
+                          border: '1px solid #374151',
+                          borderRadius: '8px',
+                          color: '#fff'
+                        }} 
+                        formatter={(value) => [formatCurrency(value), '']}
+                      />
+                      <Legend />
+                      <Area
+                        type="monotone"
+                        dataKey="revenue"
+                        stackId="1"
+                        stroke="#3B82F6"
+                        fill="#3B82F6"
+                        fillOpacity={0.3}
+                        name="Revenue"
+                      />
+                      <Area
+                        type="monotone"
+                        dataKey="cashFlow"
+                        stackId="2"
+                        stroke="#10B981"
+                        fill="#10B981"
+                        fillOpacity={0.3}
+                        name="Cash Flow"
+                      />
+                    </AreaChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
-              <div style={{ color: '#9CA3AF', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                {metric.title}
+
+              {/* User Distribution */}
+              <div style={{
+                background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+                border: '1px solid #374151',
+                borderRadius: '16px',
+                padding: '24px',
+                boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+              }}>
+                <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '24px', color: 'white', margin: '0 0 24px 0' }}>
+                  User Distribution
+                </h3>
+                <div style={{ width: '100%', height: '300px' }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={data.userDistribution}
+                        cx="50%"
+                        cy="50%"
+                        outerRadius={80}
+                        dataKey="value"
+                        label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                        labelLine={false}
+                      >
+                        {data.userDistribution.map((entry, index) => (
+                          <Cell key={`cell-${index}`} fill={entry.color} />
+                        ))}
+                      </Pie>
+                      <Tooltip formatter={(value) => [formatNumber(value), '']} />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
               </div>
             </div>
-          ))}
-        </section>
 
-        {/* Charts Section */}
-        <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', marginBottom: '48px' }}>
-          {/* Revenue Chart */}
-          <div style={{
-            background: 'linear-gradient(to bottom right, #374151, #1F2937)',
-            border: '1px solid #374151',
-            borderRadius: '16px',
-            padding: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-          }}>
-            <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '24px', color: 'white', margin: '0 0 24px 0' }}>
-              Revenue & Cash Flow Trends
-            </h3>
-            <div style={{ width: '100%', height: '300px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <AreaChart data={data.revenueData.slice(0, 12)}>
-                  <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
-                  <XAxis dataKey="month" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                  <YAxis tick={{ fill: '#9CA3AF', fontSize: 12 }} />
-                  <Tooltip 
-                    contentStyle={{ 
-                      backgroundColor: '#1F2937', 
-                      border: '1px solid #374151',
-                      borderRadius: '8px',
-                      color: '#fff'
-                    }} 
-                    formatter={(value) => [formatCurrency(value), '']}
-                  />
-                  <Legend />
-                  <Area
-                    type="monotone"
-                    dataKey="revenue"
-                    stackId="1"
-                    stroke="#3B82F6"
-                    fill="#3B82F6"
-                    fillOpacity={0.3}
-                    name="Revenue"
-                  />
-                  <Area
-                    type="monotone"
-                    dataKey="cashFlow"
-                    stackId="2"
-                    stroke="#10B981"
-                    fill="#10B981"
-                    fillOpacity={0.3}
-                    name="Cash Flow"
-                  />
-                </AreaChart>
-              </ResponsiveContainer>
+            {/* Success Message */}
+            <div style={{
+              background: 'rgba(16, 185, 129, 0.2)',
+              border: '1px solid rgba(16, 185, 129, 0.5)',
+              borderRadius: '8px',
+              padding: '16px',
+              textAlign: 'center',
+              marginBottom: '24px'
+            }}>
+              <p style={{ color: '#10B981', margin: 0, fontSize: '18px' }}>
+                ✅ Dashboard loaded successfully! {error ? '(Demo mode)' : '(Live data)'}
+              </p>
             </div>
-          </div>
+          </>
+        )}
 
-          {/* User Distribution */}
-          <div style={{
-            background: 'linear-gradient(to bottom right, #374151, #1F2937)',
-            border: '1px solid #374151',
-            borderRadius: '16px',
-            padding: '24px',
-            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
-          }}>
-            <h3 style={{ fontSize: '20px', fontWeight: '600', marginBottom: '24px', color: 'white', margin: '0 0 24px 0' }}>
-              User Distribution
-            </h3>
-            <div style={{ width: '100%', height: '300px' }}>
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={data.userDistribution}
-                    cx="50%"
-                    cy="50%"
-                    outerRadius={80}
-                    dataKey="value"
-                    label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                    labelLine={false}
-                  >
-                    {data.userDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={entry.color} />
+        {activeTab === 'financials' && (
+          <section style={{ marginBottom: '48px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
+              <h3 style={{ margin: 0 }}>Full Financial Plan</h3>
+              <a href="/data/consultantcloud_36m_financial_plan.xlsx" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Open original</a>
+            </div>
+            <div style={{
+              overflow: 'auto',
+              maxHeight: '70vh',
+              border: '1px solid #374151',
+              borderRadius: 12,
+              background: 'linear-gradient(to bottom right, #111827, #1F2937)'
+            }}>
+              <table style={{ borderCollapse: 'separate', borderSpacing: 0, width: '100%', color: '#E5E7EB' }}>
+                <thead style={{ position: 'sticky', top: 0, zIndex: 1 }}>
+                  <tr>
+                    {(data.financialSheetRows?.[0] || []).map((h, i) => (
+                      <th key={i} style={{
+                        position: i === 0 ? 'sticky' : 'static',
+                        left: i === 0 ? 0 : 'auto',
+                        background: '#1F2937',
+                        borderBottom: '1px solid #374151',
+                        padding: '10px 12px',
+                        textAlign: i === 0 ? 'left' : 'right',
+                        fontWeight: 600,
+                        fontSize: 12,
+                        color: '#9CA3AF'
+                      }}>{h || (i === 0 ? 'index' : '')}</th>
                     ))}
-                  </Pie>
-                  <Tooltip formatter={(value) => [formatNumber(value), '']} />
-                </PieChart>
-              </ResponsiveContainer>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data.financialSheetRows?.slice(1).map((row, rIdx) => (
+                    <tr key={rIdx}>
+                      {row.map((cell, cIdx) => (
+                        <td key={cIdx} style={{
+                          position: cIdx === 0 ? 'sticky' : 'static',
+                          left: cIdx === 0 ? 0 : 'auto',
+                          background: cIdx === 0 ? '#111827' : 'transparent',
+                          borderBottom: '1px solid #374151',
+                          padding: '8px 12px',
+                          whiteSpace: 'nowrap',
+                          textAlign: cIdx === 0 ? 'left' : 'right',
+                          fontVariantNumeric: 'tabular-nums'
+                        }}>
+                          {cIdx === 0 ? (cell ?? '') : (typeof cell === 'number' ? formatCurrency(cell) : (cell ?? ''))}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
-          </div>
-        </div>
-
-        {/* Success Message */}
-        <div style={{
-          background: 'rgba(16, 185, 129, 0.2)',
-          border: '1px solid rgba(16, 185, 129, 0.5)',
-          borderRadius: '8px',
-          padding: '16px',
-          textAlign: 'center',
-          marginBottom: '24px'
-        }}>
-          <p style={{ color: '#10B981', margin: 0, fontSize: '18px' }}>
-            ✅ Dashboard loaded successfully! {error ? '(Demo mode)' : '(Live data)'}
-          </p>
-        </div>
+          </section>
+        )}
       </div>
 
       {/* Footer */}

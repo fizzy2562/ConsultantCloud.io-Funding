@@ -282,14 +282,18 @@ export default function App() {
                   After nearly a decade in the Salesforce ecosystem, I noticed a recurring theme: talented professionals were eager to grow, but the pathway to certification and career advancement often felt overwhelming, fragmented, and expensive.
                 </p>
                 <p style={{ color: '#D1D5DB' }}>
-                  Through my work leading the Salesforce Admin Group in Dublin and co‑founding Irish Dreamin’, I saw first‑hand how powerful community and shared knowledge can be in breaking down those barriers.
+                  Through my work leading the{' '}
+                  <a href="https://trailblazercommunitygroups.com/salesforce-admin-group-dublin-ireland/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Salesforce Admin Group in Dublin</a>{' '}
+                  and co‑founding{' '}
+                  <a href="https://irishdreamin.ie/about-us/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Irish Dreamin’</a>, I saw first‑hand how powerful community and shared knowledge can be in breaking down those barriers.
                 </p>
                 <p style={{ color: '#D1D5DB' }}>
                   That experience inspired me to build{' '}
                   <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>ConsultantCloud.io</a>, a platform designed to make Salesforce certification and career growth simpler, faster, and more accessible.
                 </p>
                 <p style={{ color: '#D1D5DB' }}>
-                  Consultant Cloud curates high‑quality study resources, practice exams, real‑world insights, and community features — supporting professionals from Admins to Architects.
+                  Consultant Cloud curates high‑quality study resources, practice exams, real‑world insights, and community features — supporting professionals from Admins to Architects. Hear more of the story on the{' '}
+                  <a href="https://podtail.com/podcast/cloudbites-conversations/from-admin-to-architect-ciaran-fitzgerald-on-growt/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>CloudBites Conversations podcast</a>.
                 </p>
               </div>
               <div style={{ textAlign: 'center' }}>

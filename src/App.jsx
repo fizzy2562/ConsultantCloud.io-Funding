@@ -91,6 +91,7 @@ export default function App() {
         
         setData(transformedData)
         setError(null)
+        console.info('✅ Dashboard loaded successfully! (Live data)')
       } catch (e) {
         console.warn('⚠️ Excel loading failed, using mock data:', e)
         setData(generateMockData())
@@ -219,16 +220,9 @@ export default function App() {
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '16px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <h1 style={{
-              fontSize: '24px',
-              fontWeight: 'bold',
-              background: 'linear-gradient(to right, #60A5FA, #34D399)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              margin: 0
-            }}>
-              ConsultantCloud
-            </h1>
+            <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
+              <img src="/assets/consultantcloud-logo.png" alt="ConsultantCloud" style={{ height: 32, width: 'auto' }} />
+            </a>
             <div style={{ display: 'flex', gap: '32px' }}>
               {['overview', 'financials', 'users', 'projections'].map((tab) => (
                 <button
@@ -425,19 +419,7 @@ export default function App() {
               </div>
             </div>
 
-            {/* Success Message */}
-            <div style={{
-              background: 'rgba(16, 185, 129, 0.2)',
-              border: '1px solid rgba(16, 185, 129, 0.5)',
-              borderRadius: '8px',
-              padding: '16px',
-              textAlign: 'center',
-              marginBottom: '24px'
-            }}>
-              <p style={{ color: '#10B981', margin: 0, fontSize: '18px' }}>
-                ✅ Dashboard loaded successfully! {error ? '(Demo mode)' : '(Live data)'}
-              </p>
-            </div>
+            {/* Success message is now only printed to console */}
           </>
         )}
 
@@ -511,11 +493,16 @@ export default function App() {
       <footer style={{
         background: '#111827',
         borderTop: '1px solid #374151',
-        padding: '32px',
+        padding: '24px',
         textAlign: 'center',
-        color: '#6B7280'
+        color: '#9CA3AF'
       }}>
-        <p style={{ margin: 0 }}>&copy; 2024 ConsultantCloud. Professional financial planning dashboard.</p>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
+          <span>Made with ❤️ in Brussels | made by</span>
+          <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
+            <img src="/assets/consultantcloud-logo.png" alt="ConsultantCloud" style={{ height: 18, width: 'auto' }} />
+          </a>
+        </div>
       </footer>
 
       {/* CSS Animation */}

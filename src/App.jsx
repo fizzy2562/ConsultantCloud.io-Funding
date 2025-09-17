@@ -293,23 +293,30 @@ export default function App() {
           <section style={{ marginBottom: '48px' }}>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
               <div>
-                <h2 style={{ marginTop: 0, marginBottom: 12 }}>About Me</h2>
+                <h2 style={{ marginTop: 0, marginBottom: 12, textTransform: 'none' }}>build cool things, help people.</h2>
                 <p style={{ color: '#D1D5DB' }}>
-                  After nearly a decade in the Salesforce ecosystem, I noticed a recurring theme: talented professionals were eager to grow, but the pathway to certification and career advancement often felt overwhelming, fragmented, and expensive.
+                  I studied chemistry, started in compliance, and honestly thought my future would involve lab coats, spreadsheets, and maybe saving the world one regulation at a time. Instead, a sharp left turn landed me in a Dublin tech start‑up called Social Talent, just as they were about to roll out Salesforce.
                 </p>
                 <p style={{ color: '#D1D5DB' }}>
-                  Through my work leading the{' '}
-                  <a href="https://trailblazercommunitygroups.com/salesforce-admin-group-dublin-ireland/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Salesforce Admin Group in Dublin</a>{' '}
-                  and co‑founding{' '}
-                  <a href="https://irishdreamin.ie/about-us/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Irish Dreamin’</a>, I saw first‑hand how powerful community and shared knowledge can be in breaking down those barriers.
+                  With no budget, no playbook, and definitely no clue, I suddenly found myself as an accidental admin tasked with making SteelBrick CPQ and DocuSign work for 50 users. Imagine being told: “Here’s a rocket ship. You’ve never flown one before, but please get it into orbit by next Tuesday.”
+                </p>
+                <p style={{ color: '#D1D5DB' }}>
+                  It was pure sink‑or‑swim — and after a lot of flailing, Googling, and muttering at my laptop, I discovered something unexpected: I actually loved it. That trial by fire lit the spark that became my career in Salesforce.
+                </p>
+                <p style={{ color: '#D1D5DB' }}>
+                  From there, I moved into consultancy, joining Bluewave and working with some of the best mentors in the ecosystem. They taught me the value of curiosity, asking questions, and learning by doing. I also learned another important consultant skill: how to look calm while silently panicking inside a client workshop. Later, I struck out on my own as a freelancer, delivering projects across industries and spotting the same theme everywhere: talented people eager to grow, but struggling with a fragmented, expensive, and often overwhelming learning journey.
+                </p>
+                <p style={{ color: '#D1D5DB' }}>
+                  Community has always been the difference. As co‑leader of the{' '}
+                  <a href="https://trailblazercommunitygroups.com/salesforce-admin-group-dublin-ireland/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Salesforce Admin Group in Dublin</a>{' '}and co‑founder of{' '}
+                  <a href="https://irishdreamin.ie/about-us/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>Irish Dreamin’</a>, I’ve seen how shared knowledge and collaboration can accelerate careers. Sitting with others, trading tips, or simply hearing “yep, I broke that flow too” — that’s where the magic happens.
                 </p>
                 <p style={{ color: '#D1D5DB' }}>
                   That experience inspired me to build{' '}
-                  <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>ConsultantCloud.io</a>, a platform designed to make Salesforce certification and career growth simpler, faster, and more accessible.
+                  <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>ConsultantCloud.io</a>. The goal is simple: to give Salesforce professionals the kind of structured, supportive resource I wish I’d had starting out. ConsultantCloud curates high‑quality study guides, practice exams, Chrome extensions, blogs, and podcasts — plus a growing set of community‑driven features. Whether you’re an Admin, Consultant, or Architect, the platform is designed to make certification and career growth simpler, faster, and more accessible.
                 </p>
                 <p style={{ color: '#D1D5DB' }}>
-                  Consultant Cloud curates high‑quality study resources, practice exams, real‑world insights, and community features — supporting professionals from Admins to Architects. Hear more of the story on the{' '}
-                  <a href="https://podtail.com/podcast/cloudbites-conversations/from-admin-to-architect-ciaran-fitzgerald-on-growt/?utm_source=chatgpt.com" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>CloudBites Conversations podcast</a>.
+                  For me, it all comes back to one mantra: <strong>build cool things, help people.</strong> That’s what this ecosystem gave me, and it’s what ConsultantCloud aims to give back.
                 </p>
               </div>
               <div style={{ textAlign: 'center' }}>

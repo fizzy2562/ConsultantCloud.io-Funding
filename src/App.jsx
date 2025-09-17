@@ -305,7 +305,7 @@ export default function App() {
 
         {/* Hero Section */
         }
-        <section style={{ textAlign: 'center', padding: '48px 0', marginBottom: '24px' }}>
+        <section style={{ textAlign: 'center', padding: '48px 0', marginBottom: '48px' }}>
           <h1 style={{
             fontSize: '60px',
             fontWeight: '800',
@@ -318,9 +318,6 @@ export default function App() {
             Financial Dashboard
           </h1>
           <p style={{ fontSize: '20px', color: '#9CA3AF', margin: 0 }}>36-Month Financial Planning & Analysis</p>
-          <div style={{ marginTop: 16 }}>
-            <img src="/assets/about-irish-dreamin.jpeg" alt="Irish Dreamin Presentation" style={{ maxWidth: '900px', width: '100%', height: 'auto', borderRadius: 12, border: '1px solid #374151' }} />
-          </div>
         </section>
 
         {activeTab === 'overview' && (

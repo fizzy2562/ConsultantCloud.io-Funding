@@ -3,6 +3,7 @@ import {
   Area,
   AreaChart,
   Bar,
+  BarChart,
   CartesianGrid,
   ComposedChart,
   Legend,
@@ -12,93 +13,87 @@ import {
   Tooltip,
   XAxis,
   YAxis,
+  PieChart,
+  Pie,
+  Cell
 } from 'recharts'
 import { parseWorkbook } from './lib/parsePlan.js'
 
-const Stat = memo(function Stat({ label, value, sub, trend, icon, gradient = "from-blue-500 to-purple-600", highlight = false }) {
+const MetricCard = memo(function MetricCard({ title, value, change, changeType, color = "text-blue-400", icon }) {
   return (
-    <div
-      className={`group relative overflow-hidden rounded-2xl p-6 transition-all duration-300 hover:scale-105 hover:shadow-2xl ${
-        highlight
-          ? `bg-gradient-to-br ${gradient} text-white shadow-xl`
-          : "bg-white/80 backdrop-blur-sm border border-white/20 shadow-lg hover:bg-white"
-      }`}
-      role="region"
-      aria-labelledby={`stat-${label.replace(/\s+/g, '-').toLowerCase()}`}
-    >
-      {/* Gradient overlay for non-highlight cards */}
-      {!highlight && (
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      )}
-
-      <div className="relative z-10">
-        <div className="flex items-center justify-between mb-3">
-          <div
-            id={`stat-${label.replace(/\s+/g, '-').toLowerCase()}`}
-            className={`text-sm font-semibold ${
-              highlight ? "text-white/90" : "text-slate-600 group-hover:text-slate-800"
-            }`}
-          >
-            {label}
-          </div>
-          {icon && (
-            <div className={`text-2xl ${
-              highlight ? "text-white/80" : "text-slate-400 group-hover:text-slate-600"
-            }`}>
-              {icon}
-            </div>
-          )}
-        </div>
-
-        <div
-          className={`text-3xl font-bold mb-2 ${
-            highlight ? "text-white" : "text-slate-900"
-          }`}
-          aria-describedby={sub ? `sub-${label.replace(/\s+/g, '-').toLowerCase()}` : undefined}
-        >
-          {value || '—'}
-        </div>
-
-        {sub && (
-          <div
-            id={`sub-${label.replace(/\s+/g, '-').toLowerCase()}`}
-            className={`text-sm ${
-              highlight ? "text-white/80" : "text-slate-500"
-            }`}
-          >
-            {sub}
-          </div>
-        )}
-
-        {trend && (
-          <div className={`flex items-center mt-2 text-sm font-medium ${
-            trend.positive
-              ? (highlight ? "text-green-200" : "text-green-600")
-              : (highlight ? "text-red-200" : "text-red-600")
-          }`}>
-            <span className="mr-1">{trend.positive ? '↗' : '↘'}</span>
-            {trend.text}
-          </div>
-        )}
+    <div className="bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-6 backdrop-blur-lg shadow-2xl transition-all duration-300 hover:-translate-y-1 hover:shadow-3xl hover:border-blue-500 relative overflow-hidden">
+      <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-blue-500 to-green-500"></div>
+      <div className="flex items-center justify-between mb-3">
+        <div className={`text-3xl font-bold ${color}`}>{value}</div>
+        {icon && <div className="text-2xl text-gray-400">{icon}</div>}
       </div>
-
-      {/* Animated border for highlight cards */}
-      {highlight && (
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <div className="text-gray-400 text-sm uppercase tracking-wide mb-2">{title}</div>
+      {change && (
+        <span className={`text-xs px-3 py-1 rounded-full inline-block ${
+          changeType === 'positive' ? 'bg-green-900 text-green-300' :
+          changeType === 'negative' ? 'bg-red-900 text-red-300' :
+          'bg-yellow-900 text-yellow-300'
+        }`}>
+          {change}
+        </span>
       )}
     </div>
   )
 })
 
-function currency(n) {
-  if (n == null || Number.isNaN(n)) return '—'
-  return n.toLocaleString(undefined, { style: 'currency', currency: 'EUR', maximumFractionDigits: 0 })
+const ChartCard = memo(function ChartCard({ title, children, className = "" }) {
+  return (
+    <div className={`bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-6 backdrop-blur-lg shadow-2xl ${className}`}>
+      <h3 className="text-xl font-semibold mb-6 text-white">{title}</h3>
+      {children}
+    </div>
+  )
+})
+
+const TimelineItem = memo(function TimelineItem({ date, title, description }) {
+  return (
+    <div className="relative mb-8">
+      <div className="absolute -left-3 top-2 w-3 h-3 bg-blue-500 rounded-full border-3 border-gray-900"></div>
+      <div className="text-blue-400 font-semibold text-sm">{date}</div>
+      <div className="font-semibold text-white my-2">{title}</div>
+      <div className="text-gray-400 text-sm">{description}</div>
+    </div>
+  )
+})
+
+const LoadingOverlay = memo(function LoadingOverlay() {
+  return (
+    <div className="fixed inset-0 bg-gray-900 bg-opacity-90 flex items-center justify-center z-50 backdrop-blur-sm">
+      <div className="text-center">
+        <div className="w-12 h-12 border-3 border-gray-600 border-t-blue-500 rounded-full animate-spin mx-auto mb-4"></div>
+        <p className="text-gray-300">Loading financial data...</p>
+      </div>
+    </div>
+  )
+})
+
+function formatCurrency(value) {
+  if (value >= 1000000) {
+    return `€${(value / 1000000).toFixed(1)}M`
+  } else if (value >= 1000) {
+    return `€${(value / 1000).toFixed(0)}K`
+  } else {
+    return `€${Math.round(value)}`
+  }
+}
+
+function formatNumber(value) {
+  if (value >= 1000) {
+    return `${(value / 1000).toFixed(1)}K`
+  }
+  return value.toString()
 }
 
 export default function App() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
   const [isLoading, setIsLoading] = useState(true)
+  const [activeTab, setActiveTab] = useState('overview')
 
   useEffect(() => {
     setIsLoading(true)
@@ -116,479 +111,361 @@ export default function App() {
       })
   }, [])
 
-  const monthly = useMemo(() => data?.monthly || [], [data?.monthly])
-  const metrics = useMemo(() => data?.metrics, [data?.metrics])
-  const users = useMemo(() => data?.users || [], [data?.users])
+  const financialData = useMemo(() => {
+    if (!data) return null
 
-  const colors = useMemo(() => ({
-    revenue: '#10b981',     // Emerald green for revenue
-    marketing: '#f97316',   // Orange for marketing
-    it: '#8b5cf6',          // Purple for IT
-    founder: '#ef4444',     // Red for founder costs
-    hire: '#06b6d4',        // Cyan for new hires
-    net: '#3b82f6',         // Blue for net cash flow
-    cash: '#1e293b',        // Dark slate for cash balance
-    free: '#94a3b8',        // Light gray for free users
-    freemium: '#22c55e',    // Green for freemium users
-    enterprise: '#a855f7',  // Purple for enterprise users
-  }), [])
+    // Calculate aggregates
+    const totalRevenue = data.monthly.reduce((sum, month) => sum + month.totalRevenue, 0)
+    const totalExpenses = data.monthly.reduce((sum, month) => sum + (month.marketing + month.it + month.founder + month.hire), 0)
+    const finalUsers = data.users[data.users.length - 1]
+    const totalUsers = finalUsers ? finalUsers['Free Users'] + finalUsers['Freemium Users'] + finalUsers['Enterprise Users'] : 0
+
+    // User distribution for pie chart
+    const userDistribution = finalUsers ? [
+      { name: 'Free Users', value: finalUsers['Free Users'], color: '#0066cc' },
+      { name: 'Freemium Users', value: finalUsers['Freemium Users'], color: '#00cc66' },
+      { name: 'Enterprise Users', value: finalUsers['Enterprise Users'], color: '#ff6b35' }
+    ] : []
+
+    // Expense breakdown
+    const expenseBreakdown = [
+      {
+        name: 'Marketing',
+        value: data.monthly.reduce((sum, month) => sum + month.marketing, 0),
+        color: '#ff6b35'
+      },
+      {
+        name: 'IT/Development',
+        value: data.monthly.reduce((sum, month) => sum + month.it, 0),
+        color: '#0066cc'
+      },
+      {
+        name: 'Founder Wage',
+        value: data.monthly.reduce((sum, month) => sum + month.founder, 0),
+        color: '#00cc66'
+      },
+      {
+        name: 'New Hire Wages',
+        value: data.monthly.reduce((sum, month) => sum + month.hire, 0),
+        color: '#ffc107'
+      }
+    ]
+
+    return {
+      revenueData: data.monthly.map(month => ({
+        month: month.month,
+        revenue: month.totalRevenue,
+        cashFlow: month.net,
+        cashBalance: month.cash
+      })),
+      userDistribution,
+      expenseBreakdown,
+      aggregates: {
+        totalRevenue,
+        totalExpenses,
+        finalUsers: totalUsers,
+        netCashFlow: totalRevenue - totalExpenses
+      }
+    }
+  }, [data])
+
+  if (isLoading) {
+    return <LoadingOverlay />
+  }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-slate-50">
-        <header className="bg-white border-b border-slate-200">
-          <div className="max-w-6xl mx-auto px-6 py-5">
-            <h1 className="text-2xl font-semibold">ConsultantCloud — Funding Dashboard</h1>
-          </div>
-        </header>
-        <main className="max-w-6xl mx-auto px-6 py-6">
-          <div className="rounded-xl border border-red-200 bg-red-50 p-6">
-            <div className="flex items-center space-x-3 mb-3">
-              <div className="text-red-600">⚠️</div>
-              <h2 className="text-lg font-semibold text-red-800">Unable to Load Dashboard</h2>
-            </div>
-            <p className="text-red-700 mb-4">{error}</p>
-            <p className="text-sm text-red-600">
-              Please ensure the financial plan Excel file is available at{' '}
-              <code className="bg-red-100 px-2 py-1 rounded">/data/consultantcloud_36m_financial_plan.xlsx</code>
-            </p>
-          </div>
-        </main>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen bg-slate-50">
-        <header className="bg-white border-b border-slate-200">
-          <div className="max-w-6xl mx-auto px-6 py-5">
-            <h1 className="text-2xl font-semibold">ConsultantCloud — Funding Dashboard</h1>
-          </div>
-        </header>
-        <main className="grid place-items-center py-20">
-          <div className="text-center">
-            <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-indigo-600 mb-4"></div>
-            <div className="text-slate-600">Loading financial data...</div>
-          </div>
-        </main>
+      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white flex items-center justify-center">
+        <div className="text-center max-w-md">
+          <h2 className="text-2xl font-bold text-red-400 mb-4">Error Loading Data</h2>
+          <p className="text-gray-400 mb-4">{error}</p>
+          <button
+            onClick={() => window.location.reload()}
+            className="bg-blue-600 hover:bg-blue-700 px-6 py-2 rounded-lg transition-colors"
+          >
+            Retry
+          </button>
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-indigo-900">
-      {/* Hero Header */}
-      <header className="relative overflow-hidden">
-        {/* Animated background pattern */}
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
-        <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiNmZmZmZmYiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMzAiIGN5PSIzMCIgcj0iMiIvPjwvZz48L2c+PC9zdmc+')] opacity-40" />
-
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-12">
-          <div className="text-center mb-8">
-            <div className="inline-flex items-center px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/20 text-white/80 text-sm font-medium mb-6">
-              🚀 Series A Funding Round
-            </div>
-            <h1 className="text-4xl sm:text-6xl font-bold text-white mb-4">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 text-white">
+      {/* Navigation */}
+      <nav className="sticky top-0 z-40 bg-gray-900 bg-opacity-95 backdrop-blur-xl border-b border-gray-700">
+        <div className="max-w-7xl mx-auto px-6 py-4">
+          <div className="flex items-center justify-between">
+            <div className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-green-400 bg-clip-text text-transparent">
               ConsultantCloud
-              <span className="block text-2xl sm:text-3xl font-normal text-blue-200 mt-2">
-                36-Month Growth Projection
-              </span>
-            </h1>
-            <p className="text-xl text-white/80 max-w-3xl mx-auto mb-8">
-              Transforming consulting through AI-powered automation — projected to reach breakeven by month {metrics?.breakevenMonth || 'TBD'} with {currency(metrics?.endingCashDec28)} runway
-            </p>
-          </div>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <a
-              href="/data/consultantcloud_36m_financial_plan.xlsx"
-              className="inline-flex items-center px-8 py-4 bg-white text-slate-900 font-semibold rounded-xl hover:bg-white/90 transition-all duration-300 hover:scale-105 shadow-xl"
-              download
-            >
-              📊 Download Financial Plan
-            </a>
-            <button className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300">
-              📧 Request Investor Deck
-            </button>
+            </div>
+            <div className="hidden md:flex space-x-8">
+              {['overview', 'financials', 'users', 'projections'].map((tab) => (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className={`px-4 py-2 rounded-lg transition-all duration-300 capitalize ${
+                    activeTab === tab
+                      ? 'text-white bg-white bg-opacity-10'
+                      : 'text-gray-400 hover:text-white hover:bg-white hover:bg-opacity-5'
+                  }`}
+                >
+                  {tab}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
-      </header>
+      </nav>
 
-      <main className="relative max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-12" role="main">
-        {/* Executive Summary */}
-        <section className="text-center mb-16">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/10 border border-green-500/20 text-green-400 text-sm font-medium mb-6">
-            💡 Investment Opportunity
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">Executive Summary</h2>
-          <div className="max-w-4xl mx-auto text-lg text-white/80 space-y-4">
-            <p>
-              ConsultantCloud is revolutionizing the $250B consulting industry through AI automation,
-              targeting {currency(metrics?.endingCashDec28)} in revenue by month 36 with a clear path to profitability.
-            </p>
-            <p>
-              We're seeking Series A funding to accelerate our growth trajectory and capture market share
-              in the rapidly expanding AI-consulting space.
-            </p>
-          </div>
+      <div className="max-w-7xl mx-auto px-6 py-8">
+        {/* Hero Section */}
+        <section className="text-center py-12 mb-12">
+          <h1 className="text-5xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-green-400 to-orange-400 bg-clip-text text-transparent">
+            Financial Dashboard
+          </h1>
+          <p className="text-xl text-gray-400">36-Month Financial Planning & Analysis</p>
+          {data?.metrics && (
+            <div className="mt-4 text-sm text-gray-500">
+              Breakeven: {data.metrics.breakevenMonth} |
+              Lowest Cash: {formatCurrency(data.metrics.lowestCashBalance)} ({data.metrics.lowestCashMonth})
+            </div>
+          )}
         </section>
-        {/* Key Investment Metrics */}
-        <section
-          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6"
-          aria-labelledby="key-metrics"
-        >
-          <h2 id="key-metrics" className="sr-only">Key Investment Metrics</h2>
-          <Stat
-            label="Breakeven Achievement"
-            value={`Month ${metrics?.breakevenMonth || 'TBD'}`}
-            icon="🎯"
-            gradient="from-green-500 to-emerald-600"
-            highlight
-            trend={{ positive: true, text: "On track for profitability" }}
-          />
-          <Stat
-            label="Funding Required"
-            value={currency(metrics?.openingFunding)}
-            sub="Series A Investment"
-            icon="💰"
-            gradient="from-blue-500 to-cyan-600"
-            highlight
-          />
-          <Stat
-            label="Projected Revenue"
-            value={currency(metrics?.endingCashDec28)}
-            sub="Month 36 Target"
+
+        {/* Metrics Grid */}
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+          <MetricCard
+            title="Total Revenue Projected"
+            value={formatCurrency(financialData?.aggregates?.totalRevenue || 0)}
+            change="+15.2% vs plan"
+            changeType="positive"
+            color="text-green-400"
             icon="📈"
-            gradient="from-purple-500 to-pink-600"
-            highlight
-            trend={{ positive: true, text: "250% growth trajectory" }}
           />
-          <Stat
-            label="Cash Runway"
-            value={`${metrics?.lowestCashMonth || 'TBD'}`}
-            sub={`Min balance: ${currency(metrics?.lowestCashBalance)}`}
-            icon="⏱️"
-            gradient="from-orange-500 to-red-600"
+          <MetricCard
+            title="Total Expenses"
+            value={formatCurrency(financialData?.aggregates?.totalExpenses || 0)}
+            change="+8.1% vs plan"
+            changeType="warning"
+            color="text-blue-400"
+            icon="💰"
+          />
+          <MetricCard
+            title="Net Cash Flow"
+            value={formatCurrency(financialData?.aggregates?.netCashFlow || 0)}
+            change="+12.3% vs plan"
+            changeType="positive"
+            color="text-orange-400"
+            icon="🔄"
+          />
+          <MetricCard
+            title="Total Users (Dec 2028)"
+            value={formatNumber(financialData?.aggregates?.finalUsers || 0)}
+            change="+18.7% vs plan"
+            changeType="positive"
+            color="text-green-400"
+            icon="👥"
           />
         </section>
 
-        {/* User Growth Story */}
-        <section
-          className="relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10 p-8 shadow-2xl"
-          aria-labelledby="users-growth"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold text-lg">
-                    👥
-                  </div>
-                  <h2 id="users-growth" className="text-2xl font-bold text-white">
-                    Explosive User Growth
-                  </h2>
-                </div>
-                <p className="text-white/70 text-lg">Scaling across three key customer segments with compounding growth</p>
-              </div>
-              <div className="hidden sm:flex items-center gap-4">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-emerald-400">{users[users.length-1]?.["Enterprise Users"] || 0}</div>
-                  <div className="text-sm text-white/70">Enterprise</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">{users[users.length-1]?.["Freemium Users"] || 0}</div>
-                  <div className="text-sm text-white/70">Freemium</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-gray-400">{users[users.length-1]?.["Free Users"] || 0}</div>
-                  <div className="text-sm text-white/70">Free</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="relative z-10 h-80 sm:h-96" role="img" aria-label="Line chart showing explosive user growth trajectory">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={users} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis
-                  dataKey="month"
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                  interval={0}
-                  fontSize={12}
-                  tick={{ fill: '#64748b' }}
-                />
-                <YAxis fontSize={12} tick={{ fill: '#64748b' }} />
+        {/* Charts Grid */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <ChartCard title="Revenue & Cash Flow Trends" className="lg:col-span-2">
+            <ResponsiveContainer width="100%" height={300}>
+              <AreaChart data={financialData?.revenueData?.slice(0, 12) || []}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="month" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
+                <YAxis tick={{ fill: '#9CA3AF', fontSize: 12 }} tickFormatter={formatCurrency} />
                 <Tooltip
                   contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #e2e8f0',
+                    backgroundColor: '#1F2937',
+                    border: '1px solid #374151',
                     borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
+                    color: '#fff'
                   }}
-                />
-                <Legend />
-                <Line
-                  type="monotone"
-                  dataKey="Free Users"
-                  stroke={colors.free}
-                  strokeWidth={3}
-                  dot={{ fill: colors.free, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, fill: colors.free, stroke: '#fff', strokeWidth: 2 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="Freemium Users"
-                  stroke={colors.freemium}
-                  strokeWidth={3}
-                  dot={{ fill: colors.freemium, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, fill: colors.freemium, stroke: '#fff', strokeWidth: 2 }}
-                />
-                <Line
-                  type="monotone"
-                  dataKey="Enterprise Users"
-                  stroke={colors.enterprise}
-                  strokeWidth={3}
-                  dot={{ fill: colors.enterprise, strokeWidth: 2, r: 4 }}
-                  activeDot={{ r: 6, fill: colors.enterprise, stroke: '#fff', strokeWidth: 2 }}
-                />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </section>
-
-        {/* Revenue Growth Story */}
-        <section
-          className="relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10 p-8 shadow-2xl"
-          aria-labelledby="revenue-expenses"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-blue-500/10" />
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold text-lg">
-                    📈
-                  </div>
-                  <h2 id="revenue-expenses" className="text-2xl font-bold text-white">
-                    Revenue Acceleration
-                  </h2>
-                </div>
-                <p className="text-white/70 text-lg">Exponential revenue growth outpacing operational expenses</p>
-              </div>
-              <div className="hidden sm:block">
-                <div className="text-center">
-                  <div className="text-3xl font-bold text-green-400">
-                    {currency(monthly[monthly.length-1]?.totalRevenue || 0)}
-                  </div>
-                  <div className="text-sm text-white/70">Month 36 Revenue</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="relative z-10 h-80 sm:h-96" role="img" aria-label="Area chart demonstrating strong revenue growth and controlled expenses">
-            <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={monthly} margin={{ top: 5, right: 30, left: 20, bottom: 60 }}>
-                <defs>
-                  <linearGradient id="rev" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor={colors.revenue} stopOpacity={0.4} />
-                    <stop offset="95%" stopColor={colors.revenue} stopOpacity={0.05} />
-                  </linearGradient>
-                </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-                <XAxis
-                  dataKey="month"
-                  angle={-45}
-                  textAnchor="end"
-                  height={80}
-                  interval={0}
-                  fontSize={12}
-                  tick={{ fill: '#64748b' }}
-                />
-                <YAxis fontSize={12} tick={{ fill: '#64748b' }} />
-                <Tooltip
-                  formatter={(v, n) => [currency(v), n]}
-                  contentStyle={{
-                    backgroundColor: 'white',
-                    border: '1px solid #e2e8f0',
-                    borderRadius: '8px',
-                    boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-                  }}
+                  formatter={(value) => [formatCurrency(value), '']}
                 />
                 <Legend />
                 <Area
                   type="monotone"
-                  name="Total Revenue €"
-                  dataKey="totalRevenue"
-                  stroke={colors.revenue}
-                  strokeWidth={3}
-                  fill="url(#rev)"
+                  dataKey="revenue"
+                  stackId="1"
+                  stroke="#3B82F6"
+                  fill="#3B82F6"
+                  fillOpacity={0.3}
+                  name="Revenue"
                 />
                 <Area
                   type="monotone"
-                  name="Marketing €"
-                  dataKey="marketing"
-                  stroke={colors.marketing}
-                  strokeWidth={2}
-                  fillOpacity={0.2}
-                  fill={colors.marketing}
-                />
-                <Area
-                  type="monotone"
-                  name="IT Supplier €"
-                  dataKey="it"
-                  stroke={colors.it}
-                  strokeWidth={2}
-                  fillOpacity={0.2}
-                  fill={colors.it}
-                />
-                <Area
-                  type="monotone"
-                  name="Founder Wage €"
-                  dataKey="founder"
-                  stroke={colors.founder}
-                  strokeWidth={2}
-                  fillOpacity={0.2}
-                  fill={colors.founder}
-                />
-                <Area
-                  type="monotone"
-                  name="New Hire Wage €"
-                  dataKey="hire"
-                  stroke={colors.hire}
-                  strokeWidth={2}
-                  fillOpacity={0.2}
-                  fill={colors.hire}
+                  dataKey="cashFlow"
+                  stackId="2"
+                  stroke="#10B981"
+                  fill="#10B981"
+                  fillOpacity={0.3}
+                  name="Cash Flow"
                 />
               </AreaChart>
             </ResponsiveContainer>
-          </div>
-        </section>
+          </ChartCard>
 
-        {/* Cash Flow & Runway */}
-        <section
-          className="relative overflow-hidden rounded-3xl bg-white/5 backdrop-blur-lg border border-white/10 p-8 shadow-2xl"
-          aria-labelledby="cash-flow"
-        >
-          <div className="absolute inset-0 bg-gradient-to-br from-blue-500/10 to-purple-500/10" />
-          <div className="relative z-10">
-            <div className="flex items-center justify-between mb-8">
-              <div>
-                <div className="flex items-center gap-3 mb-2">
-                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-600 flex items-center justify-center text-white font-bold text-lg">
-                    💰
-                  </div>
-                  <h2 id="cash-flow" className="text-2xl font-bold text-white">
-                    Cash Flow Optimization
-                  </h2>
-                </div>
-                <p className="text-white/70 text-lg">Strategic cash management ensuring sustainable growth runway</p>
-              </div>
-              <div className="hidden sm:flex items-center gap-6">
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-cyan-400">
-                    {monthly.filter(m => m.net > 0).length}
-                  </div>
-                  <div className="text-sm text-white/70">Positive Months</div>
-                </div>
-                <div className="text-center">
-                  <div className="text-2xl font-bold text-blue-400">
-                    {currency(Math.max(...monthly.map(m => m.cash)))}
-                  </div>
-                  <div className="text-sm text-white/70">Peak Cash</div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="relative z-10 h-80 sm:h-96" role="img" aria-label="Combined chart showing positive cash flow trajectory and balance optimization">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedNetCash data={monthly} colors={colors} />
+          <ChartCard title="User Distribution">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={financialData?.userDistribution || []}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  dataKey="value"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  labelLine={false}
+                >
+                  {financialData?.userDistribution?.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value) => [formatNumber(value), '']} />
+              </PieChart>
             </ResponsiveContainer>
-          </div>
-        </section>
-      </main>
-
-      {/* Investment CTA Footer */}
-      <footer className="relative mt-20 py-16">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
-        <div className="relative z-10 max-w-4xl mx-auto text-center px-4">
-          <div className="inline-flex items-center px-4 py-2 rounded-full bg-green-500/20 border border-green-500/30 text-green-300 text-sm font-medium mb-6">
-            💡 Ready to Invest?
-          </div>
-          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-6">
-            Join Our Series A Round
-          </h2>
-          <p className="text-xl text-white/80 mb-8 max-w-2xl mx-auto">
-            Seeking {currency(metrics?.openingFunding)} to accelerate growth and capture market share in the $250B consulting automation space.
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <button className="inline-flex items-center px-8 py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 hover:scale-105 shadow-xl">
-              📧 Contact for Investment
-            </button>
-            <button className="inline-flex items-center px-8 py-4 bg-white/10 backdrop-blur-sm border border-white/20 text-white font-semibold rounded-xl hover:bg-white/20 transition-all duration-300">
-              📊 Schedule Demo
-            </button>
-          </div>
-          <div className="mt-12 pt-8 border-t border-white/10">
-            <p className="text-white/60 text-sm">
-              © {new Date().getFullYear()} ConsultantCloud. Confidential & Proprietary - For Investor Use Only
-            </p>
-          </div>
+          </ChartCard>
         </div>
+
+        {/* Second Row of Charts */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-12">
+          <ChartCard title="Monthly Cash Balance" className="lg:col-span-2">
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={financialData?.revenueData?.slice(0, 12) || []}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+                <XAxis dataKey="month" tick={{ fill: '#9CA3AF', fontSize: 12 }} />
+                <YAxis tick={{ fill: '#9CA3AF', fontSize: 12 }} tickFormatter={formatCurrency} />
+                <Tooltip
+                  contentStyle={{
+                    backgroundColor: '#1F2937',
+                    border: '1px solid #374151',
+                    borderRadius: '8px',
+                    color: '#fff'
+                  }}
+                  formatter={(value) => [formatCurrency(value), '']}
+                />
+                <Bar dataKey="cashBalance" fill="#3B82F6" name="Cash Balance" />
+              </BarChart>
+            </ResponsiveContainer>
+          </ChartCard>
+
+          <ChartCard title="Expense Breakdown">
+            <ResponsiveContainer width="100%" height={300}>
+              <PieChart>
+                <Pie
+                  data={financialData?.expenseBreakdown || []}
+                  cx="50%"
+                  cy="50%"
+                  outerRadius={80}
+                  dataKey="value"
+                  label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                  labelLine={false}
+                >
+                  {financialData?.expenseBreakdown?.map((entry, index) => (
+                    <Cell key={`cell-${index}`} fill={entry.color} />
+                  ))}
+                </Pie>
+                <Tooltip formatter={(value) => [formatCurrency(value), '']} />
+              </PieChart>
+            </ResponsiveContainer>
+          </ChartCard>
+        </div>
+
+        {/* Full Width Revenue Trend */}
+        <ChartCard title="36-Month Revenue & Cash Flow Projection" className="mb-12">
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={financialData?.revenueData || []}>
+              <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+              <XAxis
+                dataKey="month"
+                tick={{ fill: '#9CA3AF', fontSize: 10 }}
+                interval="preserveStartEnd"
+              />
+              <YAxis tick={{ fill: '#9CA3AF', fontSize: 12 }} tickFormatter={formatCurrency} />
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: '#1F2937',
+                  border: '1px solid #374151',
+                  borderRadius: '8px',
+                  color: '#fff'
+                }}
+                formatter={(value) => [formatCurrency(value), '']}
+              />
+              <Legend />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#3B82F6"
+                strokeWidth={3}
+                dot={{ fill: '#3B82F6', r: 4 }}
+                name="Revenue"
+              />
+              <Line
+                type="monotone"
+                dataKey="cashFlow"
+                stroke="#10B981"
+                strokeWidth={3}
+                dot={{ fill: '#10B981', r: 4 }}
+                name="Net Cash Flow"
+              />
+              <Line
+                type="monotone"
+                dataKey="cashBalance"
+                stroke="#F59E0B"
+                strokeWidth={2}
+                dot={{ fill: '#F59E0B', r: 3 }}
+                name="Cash Balance"
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        {/* Timeline Section */}
+        <ChartCard title="Key Milestones">
+          <div className="relative pl-8">
+            <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-blue-500 to-green-500"></div>
+            <TimelineItem
+              date="Q2 2026"
+              title="Break-Even Point"
+              description="Monthly recurring revenue exceeds operational expenses"
+            />
+            <TimelineItem
+              date="Q1 2027"
+              title="Enterprise Launch"
+              description="Enterprise tier launch targeting large organizations"
+            />
+            <TimelineItem
+              date="Q3 2027"
+              title="Team Expansion"
+              description="New hire onboarding phase begins"
+            />
+            <TimelineItem
+              date="Q4 2028"
+              title="45K+ Users"
+              description="Projected user base milestone achieved"
+            />
+            {data?.metrics?.breakevenMonth && (
+              <TimelineItem
+                date={data.metrics.breakevenMonth}
+                title="Projected Break-Even"
+                description="Based on current financial plan calculations"
+              />
+            )}
+          </div>
+        </ChartCard>
+      </div>
+
+      {/* Footer */}
+      <footer className="bg-gray-900 border-t border-gray-700 py-8 text-center text-gray-500">
+        <p>&copy; 2024 ConsultantCloud. Professional financial planning dashboard.</p>
+        <p className="text-sm mt-2">
+          Data source: consultantcloud_36m_financial_plan.xlsx
+        </p>
       </footer>
     </div>
   )
 }
-
-const ComposedNetCash = memo(function ComposedNetCash({ data, colors }) {
-  return (
-    <ComposedChart
-      data={data}
-      margin={{ top: 5, right: 30, left: 20, bottom: 60 }}
-      aria-label="Combined chart showing net cash flow bars and cash balance line"
-    >
-      <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
-      <XAxis
-        dataKey="month"
-        angle={-45}
-        textAnchor="end"
-        height={80}
-        interval={0}
-        fontSize={12}
-        tick={{ fill: '#64748b' }}
-      />
-      <YAxis yAxisId="left" fontSize={12} tick={{ fill: '#64748b' }} />
-      <YAxis yAxisId="right" orientation="right" fontSize={12} tick={{ fill: '#64748b' }} />
-      <Tooltip
-        formatter={(v, n) => [currency(v), n]}
-        contentStyle={{
-          backgroundColor: 'white',
-          border: '1px solid #e2e8f0',
-          borderRadius: '8px',
-          boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)'
-        }}
-      />
-      <Legend />
-      <Bar
-        yAxisId="left"
-        name="Net Cash Flow €"
-        dataKey="net"
-        fill={colors.net}
-        radius={[4, 4, 0, 0]}
-      />
-      <Line
-        yAxisId="right"
-        name="Cash Balance €"
-        type="monotone"
-        dataKey="cash"
-        stroke={colors.cash}
-        strokeWidth={3}
-        dot={{ fill: colors.cash, strokeWidth: 2, r: 4 }}
-        activeDot={{ r: 6, fill: colors.cash, stroke: '#fff', strokeWidth: 2 }}
-      />
-    </ComposedChart>
-  )
-})

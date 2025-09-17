@@ -226,7 +226,7 @@ export default function App() {
               <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 64, width: 'auto', display: 'block' }} />
             </a>
             <div style={{ display: 'flex', gap: '32px' }}>
-              {['overview', 'financials', 'users', 'about'].map((tab) => (
+              {['overview', 'financials', 'personas', 'about'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -253,7 +253,7 @@ export default function App() {
                     }
                   }}
                 >
-                  {tab === 'about' ? 'About me' : tab}
+                  {tab === 'about' ? 'About me' : tab === 'personas' ? 'Personas' : tab}
                 </button>
               ))}
             </div>
@@ -273,6 +273,59 @@ export default function App() {
           }}>
             <p style={{ color: '#FCD34D', fontSize: '14px', margin: 0 }}>⚠️ {error}</p>
           </div>
+        )}
+
+        {activeTab === 'personas' && (
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginTop: 0, marginBottom: 16 }}>Personas</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+              <div style={{
+                background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+                border: '1px solid #374151',
+                borderRadius: 16,
+                padding: 24
+              }}>
+                <h3 style={{ marginTop: 0, marginBottom: 12 }}>B2B Sales Persona</h3>
+                <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
+                  <li><strong>Role:</strong> Head of Enablement / RevOps / PS Lead in SMB–Mid Market consultancies.</li>
+                  <li><strong>Goals:</strong> Ramp new hires faster; standardize delivery; reduce billable ramp time.</li>
+                  <li><strong>Pain:</strong> Fragmented learning, inconsistent quality, limited time for coaching.</li>
+                  <li><strong>Buying Drivers:</strong> Proven outcomes, time‑to‑value, easy rollout, budget‑friendly.</li>
+                </ul>
+                <h4 style={{ marginTop: 16, marginBottom: 8 }}>B2B Sales Strategy</h4>
+                <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
+                  <li><strong>Outbound:</strong> Target SI partners, boutiques, agencies with problem‑solution messaging.</li>
+                  <li><strong>Partnerships:</strong> Community groups (Admin/Architect), events (Irish Dreamin’), podcasts.</li>
+                  <li><strong>Pilot Offers:</strong> Team trials, enablement packs, manager dashboards.</li>
+                  <li><strong>Pricing:</strong> Tiered seats with annual discounts; PO/invoice support.</li>
+                  <li><strong>KPIs:</strong> Trials→paid conversion, time‑to‑first‑cert, seat expansion, NPS.</li>
+                </ul>
+              </div>
+
+              <div style={{
+                background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+                border: '1px solid #374151',
+                borderRadius: 16,
+                padding: 24
+              }}>
+                <h3 style={{ marginTop: 0, marginBottom: 12 }}>B2C Persona</h3>
+                <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
+                  <li><strong>Profile:</strong> Career switchers and junior admins/consultants pursuing certs.</li>
+                  <li><strong>Goals:</strong> Land role upgrades, pass certs, build portfolio confidence.</li>
+                  <li><strong>Pain:</strong> Info overload, expensive prep, lack of structured path.</li>
+                  <li><strong>Motivation:</strong> Community, practical guides, quick wins, mentor signals.</li>
+                </ul>
+                <h4 style={{ marginTop: 16, marginBottom: 8 }}>B2C Sales Strategy</h4>
+                <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
+                  <li><strong>Acquisition:</strong> SEO content, Learning Hub, newsletter, social micro‑demos.</li>
+                  <li><strong>Activation:</strong> Guided paths, checklists, practice exams, streaks.</li>
+                  <li><strong>Monetization:</strong> Freemium→Pro (mock exams, toolkits), student discounts.</li>
+                  <li><strong>Community:</strong> Study circles, office hours, shareable progress.</li>
+                  <li><strong>KPIs:</strong> Signup→activation, WAU, cert pass rate, retention.</li>
+                </ul>
+              </div>
+            </div>
+          </section>
         )}
 
         {/* Hero Section */}

@@ -224,7 +224,7 @@ export default function App() {
               <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 64, width: 'auto', display: 'block' }} />
             </a>
             <div style={{ display: 'flex', gap: '32px' }}>
-              {['overview', 'financials', 'users', 'projections'].map((tab) => (
+              {['overview', 'financials', 'users', 'about'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -251,7 +251,7 @@ export default function App() {
                     }
                   }}
                 >
-                  {tab}
+                  {tab === 'about' ? 'About me' : tab}
                 </button>
               ))}
             </div>
@@ -271,6 +271,32 @@ export default function App() {
           }}>
             <p style={{ color: '#FCD34D', fontSize: '14px', margin: 0 }}>⚠️ {error}</p>
           </div>
+        )}
+
+        {activeTab === 'about' && (
+          <section style={{ marginBottom: '48px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
+              <div>
+                <h2 style={{ marginTop: 0, marginBottom: 12 }}>About Me</h2>
+                <p style={{ color: '#D1D5DB' }}>
+                  After nearly a decade in the Salesforce ecosystem, I noticed a recurring theme: talented professionals were eager to grow, but the pathway to certification and career advancement often felt overwhelming, fragmented, and expensive.
+                </p>
+                <p style={{ color: '#D1D5DB' }}>
+                  Through my work leading the Salesforce Admin Group in Dublin and co‑founding Irish Dreamin’, I saw first‑hand how powerful community and shared knowledge can be in breaking down those barriers.
+                </p>
+                <p style={{ color: '#D1D5DB' }}>
+                  That experience inspired me to build{' '}
+                  <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>ConsultantCloud.io</a>, a platform designed to make Salesforce certification and career growth simpler, faster, and more accessible.
+                </p>
+                <p style={{ color: '#D1D5DB' }}>
+                  Consultant Cloud curates high‑quality study resources, practice exams, real‑world insights, and community features — supporting professionals from Admins to Architects.
+                </p>
+              </div>
+              <div style={{ textAlign: 'center' }}>
+                <img src="/assets/about-photo.png" alt="About" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, border: '1px solid #374151' }} />
+              </div>
+            </div>
+          </section>
         )}
 
         {/* Hero Section */

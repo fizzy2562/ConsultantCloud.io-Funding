@@ -221,7 +221,7 @@ export default function App() {
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '16px 24px' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
             <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
-              <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 32, width: 'auto', display: 'block' }} />
+              <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 64, width: 'auto', display: 'block' }} />
             </a>
             <div style={{ display: 'flex', gap: '32px' }}>
               {['overview', 'financials', 'users', 'projections'].map((tab) => (
@@ -500,7 +500,7 @@ export default function App() {
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' }}>
           <span>Made with ❤️ in Brussels | made by</span>
           <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center' }}>
-            <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 18, width: 'auto', display: 'block' }} />
+            <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 36, width: 'auto', display: 'block' }} />
           </a>
         </div>
       </footer>

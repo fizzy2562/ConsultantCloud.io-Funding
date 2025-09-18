@@ -226,11 +226,11 @@ export default function App() {
         borderBottom: '1px solid #374151'
       }}>
         <div style={{ maxWidth: '1280px', margin: '0 auto', padding: '16px 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
             <a href="https://www.consultantcloud.io/" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}>
               <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 64, width: 'auto', display: 'block' }} />
             </a>
-            <div style={{ display: 'flex', gap: '32px' }}>
+            <div role="tablist" aria-label="Dashboard Sections" style={{ display: 'flex', gap: isSmall ? 12 : 32, overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
               {['overview', 'financials', 'personas', 'about'].map((tab) => (
                 <button
                   key={tab}
@@ -239,12 +239,16 @@ export default function App() {
                     background: activeTab === tab ? 'rgba(255, 255, 255, 0.1)' : 'transparent',
                     color: activeTab === tab ? 'white' : '#9CA3AF',
                     border: 'none',
-                    padding: '8px 16px',
+                    padding: '12px 16px',
+                    minHeight: 44,
                     borderRadius: '8px',
                     cursor: 'pointer',
                     textTransform: 'capitalize',
-                    transition: 'all 0.3s ease'
+                    transition: 'all 0.3s ease',
+                    whiteSpace: 'nowrap'
                   }}
+                  role="tab"
+                  aria-selected={activeTab === tab}
                   onMouseEnter={(e) => {
                     if (activeTab !== tab) {
                       e.target.style.color = 'white'
@@ -283,7 +287,7 @@ export default function App() {
         {activeTab === 'personas' && (
           <section style={{ marginBottom: '48px' }}>
             <h2 style={{ marginTop: 0, marginBottom: 16 }}>Personas</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr', gap: isSmall ? 16 : 24 }}>
               <div style={{
                 background: 'linear-gradient(to bottom right, #374151, #1F2937)',
                 border: '1px solid #374151',
@@ -291,7 +295,7 @@ export default function App() {
                 padding: 24
               }}>
                 <div style={{ textAlign: 'center' }}>
-                  <img src="/assets/persona-b2b.png" alt="B2B Persona" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, marginBottom: 12 }} />
+                  <img loading="lazy" src="/assets/persona-b2b.png" alt="B2B Persona" style={{ maxWidth: '100%', height: 'auto', objectFit: 'cover', borderRadius: 12, marginBottom: 12 }} />
                 </div>
                 <h3 style={{ marginTop: 0, marginBottom: 12 }}>B2B Sales Persona</h3>
                 <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
@@ -336,7 +340,7 @@ export default function App() {
                 padding: 24
               }}>
                 <div style={{ textAlign: 'center' }}>
-                  <img src="/assets/persona-b2c.png" alt="B2C Persona" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, marginBottom: 12 }} />
+                  <img loading="lazy" src="/assets/persona-b2c.png" alt="B2C Persona" style={{ maxWidth: '100%', height: 'auto', objectFit: 'cover', borderRadius: 12, marginBottom: 12 }} />
                 </div>
                 <h3 style={{ marginTop: 0, marginBottom: 12 }}>B2C Persona</h3>
                 <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
@@ -396,7 +400,7 @@ export default function App() {
 
         {activeTab === 'about' && (
           <section style={{ marginBottom: '48px' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24, alignItems: 'start' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr', gap: isSmall ? 16 : 24, alignItems: 'start' }}>
               <div>
                 <h2 style={{ marginTop: 0, marginBottom: 12, textTransform: 'none' }}>build cool things, help people.</h2>
                 <p style={{ color: '#D1D5DB' }}>
@@ -425,7 +429,7 @@ export default function App() {
                 </p>
               </div>
               <div style={{ textAlign: 'center' }}>
-                <img src="/assets/about-irish-dreamin.jpeg" alt="Irish Dreamin Presentation" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, border: '1px solid #374151' }} />
+                <img loading="lazy" src="/assets/about-irish-dreamin.jpeg" alt="Irish Dreamin Presentation" style={{ maxWidth: '100%', height: 'auto', objectFit: 'cover', borderRadius: 12, border: '1px solid #374151' }} />
               </div>
             </div>
           </section>
@@ -477,7 +481,7 @@ export default function App() {
             </section>
 
             {/* Charts Section */}
-            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '2fr 1fr', gap: '32px', marginBottom: '48px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '2fr 1fr', gap: isSmall ? 16 : 32, marginBottom: '48px' }}>
               {/* Revenue Chart */}
               <div style={{
                 background: 'linear-gradient(to bottom right, #374151, #1F2937)',

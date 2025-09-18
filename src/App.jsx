@@ -285,6 +285,9 @@ export default function App() {
                 borderRadius: 16,
                 padding: 24
               }}>
+                <div style={{ textAlign: 'center' }}>
+                  <img src="/assets/persona-b2b.png" alt="B2B Persona" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, marginBottom: 12 }} />
+                </div>
                 <h3 style={{ marginTop: 0, marginBottom: 12 }}>B2B Sales Persona</h3>
                 <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
                   <li><strong>Role:</strong> Head of Enablement / RevOps / PS Lead in SMB–Mid Market consultancies.</li>
@@ -308,6 +311,9 @@ export default function App() {
                 borderRadius: 16,
                 padding: 24
               }}>
+                <div style={{ textAlign: 'center' }}>
+                  <img src="/assets/persona-b2c.png" alt="B2C Persona" style={{ maxWidth: '100%', height: 'auto', borderRadius: 12, marginBottom: 12 }} />
+                </div>
                 <h3 style={{ marginTop: 0, marginBottom: 12 }}>B2C Persona</h3>
                 <ul style={{ color: '#D1D5DB', lineHeight: 1.6, paddingLeft: 18 }}>
                   <li><strong>Profile:</strong> Career switchers and junior admins/consultants pursuing certs.</li>

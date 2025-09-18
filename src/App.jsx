@@ -582,6 +582,32 @@ export default function App() {
                 </tbody>
               </table>
             </div>
+            <div style={{
+              marginTop: 16,
+              background: 'linear-gradient(to bottom right, #111827, #1F2937)',
+              border: '1px solid #374151',
+              borderRadius: 12,
+              padding: 16,
+              color: '#E5E7EB'
+            }}>
+              <div style={{ fontWeight: 600, marginBottom: 8 }}>📊 ConsultantCloud — Key SaaS Metrics</div>
+              <div style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', lineHeight: 1.7 }}>
+                <div>Total Users (Jan 2026 → Dec 2028): 230 → 8,600</div>
+                <div>Enterprise Users (Dec 2028): 2,000</div>
+                <div>Freemium Users (Dec 2028): 600</div>
+                <div>CAGR (Users, 2026–2028): 234% per year</div>
+                <div>ARR (Annual Recurring Revenue, 2028): ~€708K</div>
+                <div>Enterprise ARR: €600K</div>
+                <div>Freemium ARR: ~€108K</div>
+                <div>MRR (Monthly Recurring Revenue, Dec 2028): ~€59K</div>
+                <div>Monthly ARPU (All Users, Dec 2028): €6.86</div>
+                <div>Enterprise ARPU: €25/user/month</div>
+                <div>Freemium ARPU: €14.99/user/month</div>
+                <div>Net Cash Flow (36 months): +€465K</div>
+                <div>Cash Runway (with €50K funding + reserves): Sustainable through 36 months with €497K ending balance</div>
+                <div>Breakeven: Achieved well before end of projection (positive net cash flow average by Year 2)</div>
+              </div>
+            </div>
           </section>
         )}
       </div>

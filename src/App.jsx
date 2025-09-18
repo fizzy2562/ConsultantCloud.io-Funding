@@ -25,6 +25,7 @@ export default function App() {
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(true)
   const [activeTab, setActiveTab] = useState('overview')
+  const [isSmall, setIsSmall] = useState(() => typeof window !== 'undefined' ? window.innerWidth < 768 : false)
 
   useEffect(() => {
     console.log('🚀 App starting...')
@@ -104,6 +105,10 @@ export default function App() {
     }
 
     loadData()
+
+    const onResize = () => setIsSmall(window.innerWidth < 768)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
   }, [])
 
   const generateMockData = () => {
@@ -472,7 +477,7 @@ export default function App() {
             </section>
 
             {/* Charts Section */}
-            <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '32px', marginBottom: '48px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '2fr 1fr', gap: '32px', marginBottom: '48px' }}>
               {/* Revenue Chart */}
               <div style={{
                 background: 'linear-gradient(to bottom right, #374151, #1F2937)',

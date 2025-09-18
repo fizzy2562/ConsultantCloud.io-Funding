@@ -371,21 +371,23 @@ export default function App() {
           </section>
         )}
 
-        {/* Hero Section */}
-        <section style={{ textAlign: 'center', padding: '48px 0', marginBottom: '48px' }}>
-          <h1 style={{
-            fontSize: '60px',
-            fontWeight: '800',
-            marginBottom: '16px',
-            background: 'linear-gradient(to right, #60A5FA, #34D399, #FB923C)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            margin: '0 0 16px 0'
-          }}>
-            Financial Dashboard
-          </h1>
-          <p style={{ fontSize: '20px', color: '#9CA3AF', margin: 0 }}>36-Month Financial Planning & Analysis</p>
-        </section>
+        {/* Hero Section (hidden on About/Personas) */}
+        {!(activeTab === 'about' || activeTab === 'personas') && (
+          <section style={{ textAlign: 'center', padding: '48px 0', marginBottom: '48px' }}>
+            <h1 style={{
+              fontSize: '60px',
+              fontWeight: '800',
+              marginBottom: '16px',
+              background: 'linear-gradient(to right, #60A5FA, #34D399, #FB923C)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              margin: '0 0 16px 0'
+            }}>
+              Financial Dashboard
+            </h1>
+            <p style={{ fontSize: '20px', color: '#9CA3AF', margin: 0 }}>36-Month Financial Planning & Analysis</p>
+          </section>
+        )}
 
         {activeTab === 'about' && (
           <section style={{ marginBottom: '48px' }}>

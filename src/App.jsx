@@ -645,7 +645,7 @@ export default function App() {
               color: '#E5E7EB'
             }}>
               <div style={{ fontWeight: 600, marginBottom: 8 }}>📊 ConsultantCloud — Key SaaS Metrics</div>
-              <div style={{ fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace', lineHeight: 1.7 }}>
+              <div style={{ lineHeight: 1.7, fontVariantNumeric: 'tabular-nums' }}>
                 <div>Total Users (Jan 2026 → Dec 2028): 230 → 8,600</div>
                 <div>Enterprise Users (Dec 2028): 2,000</div>
                 <div>Freemium Users (Dec 2028): 600</div>

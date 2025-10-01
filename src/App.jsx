@@ -891,34 +891,15 @@ export default function App() {
         .sources-grid {
           display: grid;
           width: 100%;
-          gap: 20px;
-          max-width: min(98vw, 1800px);
+          gap: 28px;
+          max-width: min(98vw, 2000px);
           margin: 0 auto;
-          padding: 0 24px;
+          padding: 0 28px;
+          grid-template-columns: repeat(auto-fit, minmax(760px, 1fr));
         }
 
         .sources-grid > * {
           width: 100%;
-        }
-
-        @media (min-width: 992px) {
-          .sources-grid {
-            gap: 28px;
-          }
-        }
-
-        @media (min-width: 1200px) {
-          .sources-grid {
-            grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 36px;
-          }
-        }
-
-        @media (min-width: 1600px) {
-          .sources-grid {
-            max-width: min(96vw, 2000px);
-            gap: 40px;
-          }
         }
 
         body { 

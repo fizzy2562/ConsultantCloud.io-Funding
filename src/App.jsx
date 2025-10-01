@@ -891,26 +891,33 @@ export default function App() {
         .sources-grid {
           display: grid;
           width: 100%;
-          gap: 16px;
-          max-width: min(95vw, 1500px);
+          gap: 20px;
+          max-width: min(98vw, 1800px);
           margin: 0 auto;
-          padding: 0 16px;
+          padding: 0 24px;
         }
 
         .sources-grid > * {
           width: 100%;
         }
 
-        @media (min-width: 768px) {
+        @media (min-width: 992px) {
           .sources-grid {
-            gap: 24px;
+            gap: 28px;
           }
         }
 
         @media (min-width: 1200px) {
           .sources-grid {
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 32px;
+            gap: 36px;
+          }
+        }
+
+        @media (min-width: 1600px) {
+          .sources-grid {
+            max-width: min(96vw, 2000px);
+            gap: 40px;
           }
         }
 

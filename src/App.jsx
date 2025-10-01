@@ -122,12 +122,26 @@ function SourcesTable({ title, data, compact = false }) {
   const headingFontSize = compact ? 11 : 12
   const bodyFontSize = compact ? 13 : 14
   const bodyLineHeight = compact ? 1.5 : 1.6
+  const minTableWidth = compact ? 480 : 600
 
   return (
     <div className="hide-scrollbar" style={tableWrapperStyle}>
       <h3 style={{ marginTop: 0, marginBottom: 12, fontSize: compact ? 11 : 12, fontWeight: 600, color: '#94A3B8' }}>{title}</h3>
       <div style={{ width: '100%', maxWidth: '100%' }}>
-        <table style={{ width: '100%', maxWidth: '100%', borderCollapse: 'collapse', color: '#E5E7EB', minWidth: 600 }}>
+        <table style={{
+          width: '100%',
+          maxWidth: '100%',
+          borderCollapse: 'collapse',
+          color: '#E5E7EB',
+          minWidth: minTableWidth,
+          tableLayout: 'fixed'
+        }}>
+          <colgroup>
+            <col style={{ width: '8%' }} />
+            <col style={{ width: '70%' }} />
+            <col style={{ width: '16%' }} />
+            <col style={{ width: '6%' }} />
+          </colgroup>
           <thead>
             <tr>
               {['Year', 'Claim', 'Source', 'Link'].map((heading) => (
@@ -159,7 +173,14 @@ function SourcesTable({ title, data, compact = false }) {
                 <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontWeight: 600, fontSize: bodyFontSize }}>
                   {entry.year}
                 </td>
-                <td style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #374151', lineHeight: bodyLineHeight, fontSize: bodyFontSize }}>
+                <td style={{
+                  padding: '12px 16px',
+                  textAlign: 'left',
+                  borderBottom: '1px solid #374151',
+                  lineHeight: bodyLineHeight,
+                  fontSize: bodyFontSize,
+                  wordBreak: 'break-word'
+                }}>
                   {entry.claim}
                 </td>
                 <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontSize: bodyFontSize }}>

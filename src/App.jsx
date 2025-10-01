@@ -105,11 +105,14 @@ const supplementaryResearchSources = [
 ]
 
 const tableWrapperStyle = {
-  background: 'linear-gradient(to bottom right, #374151, #1F2937)',
-  border: '1px solid #374151',
-  borderRadius: 16,
-  padding: 24,
-  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+  background: 'linear-gradient(135deg, #1E293B 0%, #0F172A 100%)',
+  borderRadius: 8,
+  padding: 16,
+  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+  width: '100%',
+  maxWidth: '100%',
+  boxSizing: 'border-box',
+  overflowX: 'auto'
 }
 
 function SourcesTable({ title, data, compact = false }) {
@@ -119,9 +122,9 @@ function SourcesTable({ title, data, compact = false }) {
 
   return (
     <div style={tableWrapperStyle}>
-      <h3 style={{ marginTop: 0, marginBottom: 16 }}>{title}</h3>
-      <div style={{ overflowX: 'auto' }}>
-        <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, color: '#E5E7EB', minWidth: 600 }}>
+      <h3 style={{ marginTop: 0, marginBottom: 12, fontSize: compact ? 11 : 12, fontWeight: 600, color: '#94A3B8' }}>{title}</h3>
+      <div style={{ width: '100%', maxWidth: '100%' }}>
+        <table style={{ width: '100%', maxWidth: '100%', borderCollapse: 'collapse', color: '#E5E7EB', minWidth: 600 }}>
           <thead>
             <tr>
               {['Year', 'Claim', 'Source', 'Link'].map((heading) => (
@@ -595,9 +598,18 @@ export default function App() {
         )}
 
         {activeTab === 'sources' && (
-          <section style={{ marginBottom: '48px' }}>
-            <h2 style={{ marginTop: 0, marginBottom: 24, textTransform: 'none' }}>ConsultantCloud - Supporting Research Sources</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr', gap: isSmall ? 16 : 24 }}>
+          <section style={{ marginBottom: '48px', maxWidth: '100%', width: '100%', padding: '24px 16px', overflowX: 'hidden' }}>
+            <h2 style={{ marginTop: 0, marginBottom: 32, textTransform: 'none', fontSize: 24, fontWeight: 600, textAlign: 'center' }}>
+              ConsultantCloud - Supporting Research Sources
+            </h2>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr',
+              gap: isSmall ? 16 : 32,
+              maxWidth: '1400px',
+              margin: '0 auto',
+              padding: '0 16px'
+            }}>
               <SourcesTable title="Direct Salesforce Research" data={directResearchSources} />
               <SourcesTable title="Supplementary Research Sources" data={supplementaryResearchSources} compact />
             </div>

@@ -112,7 +112,10 @@ const tableWrapperStyle = {
   width: '100%',
   maxWidth: '100%',
   boxSizing: 'border-box',
-  overflowX: 'auto'
+  overflowX: 'auto',
+  scrollbarWidth: 'none',
+  msOverflowStyle: 'none',
+  WebkitOverflowScrolling: 'touch'
 }
 
 function SourcesTable({ title, data, compact = false }) {
@@ -121,7 +124,7 @@ function SourcesTable({ title, data, compact = false }) {
   const bodyLineHeight = compact ? 1.5 : 1.6
 
   return (
-    <div style={tableWrapperStyle}>
+    <div className="hide-scrollbar" style={tableWrapperStyle}>
       <h3 style={{ marginTop: 0, marginBottom: 12, fontSize: compact ? 11 : 12, fontWeight: 600, color: '#94A3B8' }}>{title}</h3>
       <div style={{ width: '100%', maxWidth: '100%' }}>
         <table style={{ width: '100%', maxWidth: '100%', borderCollapse: 'collapse', color: '#E5E7EB', minWidth: 600 }}>
@@ -867,7 +870,11 @@ export default function App() {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
-        
+
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+
         body { 
           margin: 0; 
           font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 

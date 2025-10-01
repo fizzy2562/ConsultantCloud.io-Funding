@@ -20,6 +20,209 @@ import ModernPieChart from './components/ModernPieChart.jsx'
 import { getChartVariant } from './config.js'
 import { parseWorkbook } from './lib/parsePlan.js'
 
+const directResearchSources = [
+  {
+    year: '2024',
+    claim: 'Salesforce economy will create 11.6M jobs and $2.02T in business revenues (2022-2028) powered by AI',
+    source: 'Salesforce Press Release (IDC Study)',
+    href: 'https://www.salesforce.com/news/stories/idc-salesforce-economy-ai/'
+  },
+  {
+    year: '2024',
+    claim: 'AI-powered cloud solutions expected to generate $948B in 2028 (triple from 2022)',
+    source: 'Salesforce Ben (IDC Report)',
+    href: 'https://www.salesforceben.com/salesforce-economy-to-create-11-6m-jobs-between-2022-and-2028-says-idc/'
+  },
+  {
+    year: '2021',
+    claim: 'Salesforce ecosystem will generate $6.19 for every $1 Salesforce makes by 2026',
+    source: 'Salesforce Press Release (IDC Study)',
+    href: 'https://www.salesforce.com/news/press-releases/2021/09/20/idc-salesforce-economy-2021/'
+  },
+  {
+    year: '2021',
+    claim: 'Salesforce economy created 9.3 million jobs and $1.6 trillion by 2026',
+    source: 'Salesforce Press Release (IDC Study)',
+    href: 'https://www.salesforce.com/news/press-releases/2021/09/20/idc-salesforce-economy-2021/'
+  },
+  {
+    year: '2019',
+    claim: '4.2 million new jobs and $1.2 trillion in business revenues (2019-2024)',
+    source: 'Salesforce Press Release (IDC Study)',
+    href: 'https://investor.salesforce.com/press-releases/press-release-details/2019/New-Research-Finds-The-Salesforce-Economy-Will-Create-More-than-1-Trillion-in-New-Business-Revenues-and-42-Million-Jobs-between-2019-and-2024/default.aspx'
+  },
+  {
+    year: '2017',
+    claim: 'Ecosystem expected to generate $5.18 for every $1 Salesforce makes by 2022',
+    source: 'Salesforce Press Release (IDC Study)',
+    href: 'https://investor.salesforce.com/news/news-details/2017/Salesforce-Releases-New-Research-on-the-Salesforce-Economy----Creating-33-Million-New-Jobs-and-859-Billion-in-New-Business-Revenues-Worldwide-by-2022/default.aspx'
+  }
+]
+
+const supplementaryResearchSources = [
+  {
+    year: '2025',
+    claim: '48+ Salesforce certifications available, ranging from $75-$6000',
+    source: 'Apex Hours',
+    href: 'https://www.apexhours.com/salesforce-certifications/'
+  },
+  {
+    year: '2025',
+    claim: 'Salesforce professionals with certifications earn 25% more than non-certified peers',
+    source: 'JanBask Training',
+    href: 'https://www.janbasktraining.com/blog/demand-of-salesforce-certifications/'
+  },
+  {
+    year: '2025',
+    claim: 'Demand for Salesforce professionals outstrips supply by 10:1 ratio',
+    source: 'JanBask Training',
+    href: 'https://www.janbasktraining.com/blog/demand-of-salesforce-certifications/'
+  },
+  {
+    year: '2025',
+    claim: 'Average salary ranges: Admin ($90K-$140K), Developer ($100K-$178K+), Architect ($180K-$220K)',
+    source: 'CX Today Career Guide',
+    href: 'https://www.cxtoday.com/crm/the-ultimate-salesforce-career-guide-for-2025-jobs-salaries-certifications/'
+  },
+  {
+    year: '2025',
+    claim: 'Online education market expected to reach $203.81B in 2025, growing at 8.20% CAGR',
+    source: 'eLearning Statistics',
+    href: 'https://elearningstats.education/'
+  },
+  {
+    year: '2025',
+    claim: 'Mobile learning boosts productivity by 43%, with 45% faster completion and 45% better retention',
+    source: 'eLearning Statistics',
+    href: 'https://elearningstats.education/'
+  },
+  {
+    year: '2025',
+    claim: '93% of businesses will adopt eLearning in 2025 to boost engagement and ROI',
+    source: 'eLearning Statistics',
+    href: 'https://elearningstats.education/'
+  },
+  {
+    year: '2025',
+    claim: 'Global EdTech market: $220.5B (2023) → $810.3B (2033) at 13.9% CAGR',
+    source: 'Market.us Research',
+    href: 'https://market.us/report/edtech-market/'
+  },
+  {
+    year: '2024',
+    claim: 'Global education technology market: $163.49B (2024) projected at 13.3% CAGR through 2030',
+    source: 'Grand View Research',
+    href: 'https://www.grandviewresearch.com/industry-analysis/education-technology-market'
+  },
+  {
+    year: '2024',
+    claim: 'eLearning enhances information retention by 25-40% compared to traditional methods',
+    source: 'Skillademia Research (via Market.us)',
+    href: 'https://market.us/report/edtech-market/'
+  },
+  {
+    year: '2023',
+    claim: 'Most popular Salesforce certification has over 100,000 certified professionals worldwide',
+    source: 'Trainers Squad Blog',
+    href: 'https://trainerssquad.com/blog/which-salesforce-certification-is-in-demand/'
+  },
+  {
+    year: '2023',
+    claim: 'Business segment accounts for 68.1% of EdTech market (corporate training focus)',
+    source: 'Market.us Research',
+    href: 'https://market.us/report/edtech-market/'
+  },
+  {
+    year: '2023',
+    claim: '84% of learners report increased engagement with gamified EdTech solutions',
+    source: 'Market.us Research',
+    href: 'https://market.us/report/edtech-market/'
+  },
+  {
+    year: '2022',
+    claim: '73,165 Salesforce-certified professionals',
+    source: 'CRM Consulting Salesforce Statistics Guide',
+    href: 'https://crm.consulting/blog/salesforce-statistics-guide-2022/'
+  },
+  {
+    year: '2022',
+    claim: 'Around 70,000 Salesforce-certified experts in the partner ecosystem globally',
+    source: 'Alten Capital Blog',
+    href: 'https://alten.capital/blog/salesforce-consulting-and-services-partner-ecosystem-analysis'
+  },
+  {
+    year: '2020',
+    claim: 'Tracking over 76,868 Salesforce Certified Professionals',
+    source: 'LinkedIn Post by Artisan Hub',
+    href: 'https://www.linkedin.com/pulse/artisan-hub-now-tracking-over-76800-salesforce-certified-clarke'
+  }
+]
+
+const tableWrapperStyle = {
+  background: 'linear-gradient(to bottom right, #374151, #1F2937)',
+  border: '1px solid #374151',
+  borderRadius: 16,
+  padding: 24,
+  boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
+}
+
+function SourcesTable({ title, data }) {
+  return (
+    <div style={tableWrapperStyle}>
+      <h3 style={{ marginTop: 0, marginBottom: 16 }}>{title}</h3>
+      <div style={{ overflowX: 'auto' }}>
+        <table style={{ width: '100%', borderCollapse: 'separate', borderSpacing: 0, color: '#E5E7EB', minWidth: 600 }}>
+          <thead>
+            <tr>
+              {['Year', 'Claim', 'Source', 'Link'].map((heading) => (
+                <th
+                  key={heading}
+                  style={{
+                    textAlign: heading === 'Claim' ? 'left' : 'center',
+                    padding: '12px 16px',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    textTransform: 'uppercase',
+                    letterSpacing: 0.5,
+                    color: '#9CA3AF',
+                    borderBottom: '1px solid #374151',
+                    background: '#1F2937',
+                    position: 'sticky',
+                    top: 0,
+                    zIndex: 1
+                  }}
+                >
+                  {heading}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {data.map((entry, index) => (
+              <tr key={`${entry.year}-${entry.source}-${index}`}>
+                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontWeight: 600 }}>
+                  {entry.year}
+                </td>
+                <td style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #374151', lineHeight: 1.6 }}>
+                  {entry.claim}
+                </td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151' }}>
+                  {entry.source}
+                </td>
+                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151' }}>
+                  <a href={entry.href} target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>
+                    View
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   const [data, setData] = useState(null)
   const [error, setError] = useState(null)
@@ -231,7 +434,7 @@ export default function App() {
               <img src="/assets/consultantcloud-logo-full.png" alt="ConsultantCloud" style={{ height: 64, width: 'auto', display: 'block' }} />
             </a>
             <div role="tablist" aria-label="Dashboard Sections" style={{ display: 'flex', gap: isSmall ? 12 : 32, overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-              {['overview', 'financials', 'personas', 'about'].map((tab) => (
+              {['overview', 'financials', 'personas', 'about', 'sources'].map((tab) => (
                 <button
                   key={tab}
                   onClick={() => setActiveTab(tab)}
@@ -262,7 +465,13 @@ export default function App() {
                     }
                   }}
                 >
-                  {tab === 'about' ? 'About me' : tab === 'personas' ? 'Personas' : tab}
+                  {tab === 'about'
+                    ? 'About me'
+                    : tab === 'personas'
+                      ? 'Personas'
+                      : tab === 'sources'
+                        ? 'Sources'
+                        : tab}
                 </button>
               ))}
             </div>
@@ -380,8 +589,8 @@ export default function App() {
           </section>
         )}
 
-        {/* Hero Section (hidden on About/Personas) */}
-        {!(activeTab === 'about' || activeTab === 'personas') && (
+        {/* Hero Section (hidden on About/Personas/Sources) */}
+        {!(activeTab === 'about' || activeTab === 'personas' || activeTab === 'sources') && (
           <section style={{ textAlign: 'center', padding: '48px 0', marginBottom: '48px' }}>
             <h1 style={{
               fontSize: '60px',
@@ -435,7 +644,15 @@ export default function App() {
           </section>
         )}
 
-        
+        {activeTab === 'sources' && (
+          <section style={{ marginBottom: '48px' }}>
+            <h2 style={{ marginTop: 0, marginBottom: 24, textTransform: 'none' }}>ConsultantCloud - Supporting Research Sources</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr', gap: isSmall ? 16 : 24 }}>
+              <SourcesTable title="Direct Salesforce Research" data={directResearchSources} />
+              <SourcesTable title="Supplementary Research Sources" data={supplementaryResearchSources} />
+            </div>
+          </section>
+        )}
 
         {activeTab === 'overview' && (
           <>

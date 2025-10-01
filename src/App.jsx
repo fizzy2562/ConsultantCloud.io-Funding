@@ -626,16 +626,9 @@ export default function App() {
             <h2 style={{ marginTop: 0, marginBottom: 32, textTransform: 'none', fontSize: 24, fontWeight: 600, textAlign: 'center' }}>
               ConsultantCloud - Supporting Research Sources
             </h2>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr',
-              gap: isSmall ? 16 : 32,
-              maxWidth: '1400px',
-              margin: '0 auto',
-              padding: '0 16px'
-            }}>
+            <div className="sources-grid">
               <SourcesTable title="Direct Salesforce Research" data={directResearchSources} />
-              <SourcesTable title="Supplementary Research Sources" data={supplementaryResearchSources} compact />
+              <SourcesTable title="Supplementary Research Sources" data={supplementaryResearchSources} compact={isSmall} />
             </div>
           </section>
         )}
@@ -894,6 +887,32 @@ export default function App() {
 
         .hide-scrollbar::-webkit-scrollbar {
           display: none;
+        }
+
+        .sources-grid {
+          display: grid;
+          width: 100%;
+          gap: 16px;
+          max-width: min(95vw, 1500px);
+          margin: 0 auto;
+          padding: 0 16px;
+        }
+
+        .sources-grid > * {
+          width: 100%;
+        }
+
+        @media (min-width: 768px) {
+          .sources-grid {
+            gap: 24px;
+          }
+        }
+
+        @media (min-width: 1200px) {
+          .sources-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 32px;
+          }
         }
 
         body { 

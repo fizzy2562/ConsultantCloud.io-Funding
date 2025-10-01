@@ -133,14 +133,13 @@ function SourcesTable({ title, data, compact = false }) {
           maxWidth: '100%',
           borderCollapse: 'collapse',
           color: '#E5E7EB',
-          minWidth: minTableWidth,
-          tableLayout: 'fixed'
+          minWidth: minTableWidth
         }}>
           <colgroup>
-            <col style={{ width: '8%' }} />
-            <col style={{ width: '70%' }} />
-            <col style={{ width: '16%' }} />
-            <col style={{ width: '6%' }} />
+            <col style={{ width: '10%' }} />
+            <col style={{ width: '55%' }} />
+            <col style={{ width: '25%' }} />
+            <col style={{ width: '10%' }} />
           </colgroup>
           <thead>
             <tr>
@@ -183,7 +182,7 @@ function SourcesTable({ title, data, compact = false }) {
                 }}>
                   {entry.claim}
                 </td>
-                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontSize: bodyFontSize }}>
+                <td style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #374151', fontSize: bodyFontSize, lineHeight: 1.4 }}>
                   {entry.source}
                 </td>
                 <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontSize: bodyFontSize }}>

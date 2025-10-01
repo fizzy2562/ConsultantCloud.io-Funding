@@ -101,60 +101,6 @@ const supplementaryResearchSources = [
     claim: '93% of businesses will adopt eLearning in 2025 to boost engagement and ROI',
     source: 'eLearning Statistics',
     href: 'https://elearningstats.education/'
-  },
-  {
-    year: '2025',
-    claim: 'Global EdTech market: $220.5B (2023) → $810.3B (2033) at 13.9% CAGR',
-    source: 'Market.us Research',
-    href: 'https://market.us/report/edtech-market/'
-  },
-  {
-    year: '2024',
-    claim: 'Global education technology market: $163.49B (2024) projected at 13.3% CAGR through 2030',
-    source: 'Grand View Research',
-    href: 'https://www.grandviewresearch.com/industry-analysis/education-technology-market'
-  },
-  {
-    year: '2024',
-    claim: 'eLearning enhances information retention by 25-40% compared to traditional methods',
-    source: 'Skillademia Research (via Market.us)',
-    href: 'https://market.us/report/edtech-market/'
-  },
-  {
-    year: '2023',
-    claim: 'Most popular Salesforce certification has over 100,000 certified professionals worldwide',
-    source: 'Trainers Squad Blog',
-    href: 'https://trainerssquad.com/blog/which-salesforce-certification-is-in-demand/'
-  },
-  {
-    year: '2023',
-    claim: 'Business segment accounts for 68.1% of EdTech market (corporate training focus)',
-    source: 'Market.us Research',
-    href: 'https://market.us/report/edtech-market/'
-  },
-  {
-    year: '2023',
-    claim: '84% of learners report increased engagement with gamified EdTech solutions',
-    source: 'Market.us Research',
-    href: 'https://market.us/report/edtech-market/'
-  },
-  {
-    year: '2022',
-    claim: '73,165 Salesforce-certified professionals',
-    source: 'CRM Consulting Salesforce Statistics Guide',
-    href: 'https://crm.consulting/blog/salesforce-statistics-guide-2022/'
-  },
-  {
-    year: '2022',
-    claim: 'Around 70,000 Salesforce-certified experts in the partner ecosystem globally',
-    source: 'Alten Capital Blog',
-    href: 'https://alten.capital/blog/salesforce-consulting-and-services-partner-ecosystem-analysis'
-  },
-  {
-    year: '2020',
-    claim: 'Tracking over 76,868 Salesforce Certified Professionals',
-    source: 'LinkedIn Post by Artisan Hub',
-    href: 'https://www.linkedin.com/pulse/artisan-hub-now-tracking-over-76800-salesforce-certified-clarke'
   }
 ]
 
@@ -166,7 +112,11 @@ const tableWrapperStyle = {
   boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)'
 }
 
-function SourcesTable({ title, data }) {
+function SourcesTable({ title, data, compact = false }) {
+  const headingFontSize = compact ? 11 : 12
+  const bodyFontSize = compact ? 13 : 14
+  const bodyLineHeight = compact ? 1.5 : 1.6
+
   return (
     <div style={tableWrapperStyle}>
       <h3 style={{ marginTop: 0, marginBottom: 16 }}>{title}</h3>
@@ -180,7 +130,7 @@ function SourcesTable({ title, data }) {
                   style={{
                     textAlign: heading === 'Claim' ? 'left' : 'center',
                     padding: '12px 16px',
-                    fontSize: 12,
+                    fontSize: headingFontSize,
                     fontWeight: 600,
                     textTransform: 'uppercase',
                     letterSpacing: 0.5,
@@ -200,16 +150,16 @@ function SourcesTable({ title, data }) {
           <tbody>
             {data.map((entry, index) => (
               <tr key={`${entry.year}-${entry.source}-${index}`}>
-                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontWeight: 600 }}>
+                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontWeight: 600, fontSize: bodyFontSize }}>
                   {entry.year}
                 </td>
-                <td style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #374151', lineHeight: 1.6 }}>
+                <td style={{ padding: '12px 16px', textAlign: 'left', borderBottom: '1px solid #374151', lineHeight: bodyLineHeight, fontSize: bodyFontSize }}>
                   {entry.claim}
                 </td>
-                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151' }}>
+                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontSize: bodyFontSize }}>
                   {entry.source}
                 </td>
-                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151' }}>
+                <td style={{ padding: '12px 16px', textAlign: 'center', borderBottom: '1px solid #374151', fontSize: bodyFontSize }}>
                   <a href={entry.href} target="_blank" rel="noreferrer" style={{ color: '#60A5FA' }}>
                     View
                   </a>
@@ -649,7 +599,7 @@ export default function App() {
             <h2 style={{ marginTop: 0, marginBottom: 24, textTransform: 'none' }}>ConsultantCloud - Supporting Research Sources</h2>
             <div style={{ display: 'grid', gridTemplateColumns: isSmall ? '1fr' : '1fr 1fr', gap: isSmall ? 16 : 24 }}>
               <SourcesTable title="Direct Salesforce Research" data={directResearchSources} />
-              <SourcesTable title="Supplementary Research Sources" data={supplementaryResearchSources} />
+              <SourcesTable title="Supplementary Research Sources" data={supplementaryResearchSources} compact />
             </div>
           </section>
         )}

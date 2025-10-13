@@ -1,53 +1,255 @@
-# ConsultantCloud Funding Snapshot
+# 🚀 ConsultantCloud — Financial Analytics Dashboard
 
-Static, crawlable export of the ConsultantCloud.io 36-month financial plan. The site now ships complete HTML at build time so investors, search engines, and copilots can read the operating model without executing client-side JavaScript.
+<div align="center">
 
-## Why This Rewrite
-- **Static-first delivery:** All funding tables, user growth numbers, and research citations are rendered during the Next.js build.
-- **Machine-friendly:** Structured HTML lets LLMs ingest the full dataset straight from the initial response.
-- **Lightweight deployment:** `next export` produces a portable `out/` directory deployable to any static host (Render, Netlify, Vercel, S3, etc.).
+![ConsultantCloud](https://img.shields.io/badge/ConsultantCloud-Financial%20Analytics-blue?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjQiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTMgM0gyMVY5SDNWM1oiIGZpbGw9IiMzQjgyRjYiLz4KPHBhdGggZD0iTTMgMTFIMjFWMjFIM1YxMVoiIGZpbGw9IiMxMEI5ODEiLz4KPC9zdmc+)
 
-## Getting Started
+**Enterprise-Grade Financial Analytics Dashboard**
+*Interactive 36-Month Planning & Visualization Platform*
 
+[![Live Demo](https://img.shields.io/badge/🌐_Live_Demo-Visit_Dashboard-green?style=for-the-badge)](https://fundingatconsultantcloud-io.onrender.com/)
+[![React](https://img.shields.io/badge/React-19.1.1-61DAFB?style=flat&logo=react)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-7.1.2-646CFF?style=flat&logo=vite)](https://vitejs.dev/)
+[![Recharts](https://img.shields.io/badge/Recharts-3.2.1-FF6B6B?style=flat)](https://recharts.org/)
+[![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.1.13-38B2AC?style=flat&logo=tailwindcss)](https://tailwindcss.com/)
+
+</div>
+
+---
+
+## ✨ Dashboard Overview
+
+Transform your financial data into compelling visual narratives with ConsultantCloud's premium analytics dashboard. Built for **Series A presentations**, **investor meetings**, and **executive reporting**.
+
+### 🎯 Key Features
+
+- **🌙 Premium Dark Theme** — Professional glassmorphism design with gradient accents
+- **📊 Interactive Visualizations** — 6 chart types with hover effects and animations
+- **💰 Financial Intelligence** — Revenue, expenses, cash flow, and user analytics
+- **📱 Fully Responsive** — Optimized for desktop, tablet, and mobile presentations
+- **⚡ Real-time Processing** — Client-side Excel parsing with instant visualization updates
+- **🎨 Investor-Ready** — Professional styling designed for funding presentations
+
+---
+
+## 🖼️ Dashboard Showcase
+
+### **Hero Section & Navigation**
+![Dashboard Hero](https://via.placeholder.com/800x400/1F2937/FFFFFF?text=Dark+Theme+Hero+Section+with+Gradient+Title)
+*Professional dark theme with gradient branding and tab-based navigation*
+
+### **Financial Metrics Cards**
+![Metrics Grid](https://via.placeholder.com/800x300/374151/FFFFFF?text=Interactive+Metric+Cards+with+Hover+Effects)
+*Real-time KPIs with status indicators and performance comparisons*
+
+### **Revenue & Cash Flow Analytics**
+![Revenue Charts](https://via.placeholder.com/800x400/1F2937/FFFFFF?text=Area+Charts+for+Revenue+and+Cash+Flow+Trends)
+*Interactive area charts with gradient fills and professional tooltips*
+
+### **Distribution Analysis**
+![Distribution Charts](https://via.placeholder.com/800x300/374151/FFFFFF?text=Pie+Charts+for+User+and+Expense+Distribution)
+*User segmentation and expense breakdown with custom color schemes*
+
+### **36-Month Projections**
+![Projection Timeline](https://via.placeholder.com/800x400/1F2937/FFFFFF?text=Comprehensive+36-Month+Financial+Projections)
+*Complete trend analysis with multiple data series and milestone tracking*
+
+---
+
+## 📊 Chart Types & Visualizations
+
+| Chart Type | Purpose | Features |
+|------------|---------|----------|
+| **📈 Area Charts** | Revenue & Cash Flow Trends | Gradient fills, interactive tooltips |
+| **🥧 Pie Charts** | User & Expense Distribution | Custom colors, percentage labels |
+| **📊 Bar Charts** | Monthly Cash Balance | Professional styling, hover effects |
+| **📉 Line Charts** | 36-Month Projections | Multi-series, trend analysis |
+| **⏱️ Timeline** | Business Milestones | Interactive markers, status tracking |
+| **💳 Metric Cards** | Key Performance Indicators | Real-time updates, status badges |
+
+---
+
+## 🚀 Quick Start
+
+### **1. Clone & Install**
 ```bash
 git clone https://github.com/fizzy2562/ConsultantCloud.io-Funding.git
 cd ConsultantCloud.io-Funding
 npm install
-npm run dev
-# Site available at http://localhost:3000
 ```
 
-The Excel workbook powering the plan lives at `public/data/consultantcloud_36m_financial_plan.xlsx`. Modify or replace it before running `npm run dev`/`npm run export` to rebuild the static dataset.
+### **2. Local Development**
+```bash
+npm run dev
+# Dashboard available at http://localhost:5173
+```
 
-## Available Scripts
+### **3. Add Your Financial Data**
+Place your Excel file at `public/data/consultantcloud_36m_financial_plan.xlsx`
 
-| Script | Description |
-| ------ | ----------- |
-| `npm run dev` | Launch a Next.js dev server with hot reloading. |
-| `npm run build` | Create a production build. |
-| `npm run start` | Serve the production build (useful for previews). |
-| `npm run export` | Build and statically export the site to `out/`. |
-| `npm run lint` | Run Next.js lint rules. |
-
-## Architecture Notes
-- `lib/financialPlan.js` parses the Excel workbook during `getStaticProps`, exposing monthly cash flow, user growth, and summary metrics.
-- `pages/index.js` outputs semantic tables for financials and user cohorts plus citation grids for market research.
-- Global styling lives in `styles/globals.css` and focuses on semantic readability over client-side animation.
-- Static assets (logos, spreadsheets) remain under `public/` and are copied to the export output.
-
-## Deployment (Render Static Site)
-
-`render.yaml` already targets the static workflow:
-
-- **Build Command:** `npm install && npm run export`
-- **Publish Directory:** `out`
-
-Any static host that can serve the exported directory will work.
-
-## Contributing
-
-Pull requests are welcome—especially improvements to accessibility, structured data, or additional build-time datasets. Open an issue first if you plan significant structural work.
+### **4. Build for Production**
+```bash
+npm run build
+# Optimized build created in dist/
+```
 
 ---
 
-Built with Next.js static export to keep ConsultantCloud funding data transparent and LLM-friendly.
+## 📋 Excel Data Format
+
+The dashboard expects a specific Excel structure for optimal visualization:
+
+### **Financial Plan Sheet**
+| Row Label | Jan-26 | Feb-26 | ... | Dec-28 |
+|-----------|--------|--------|-----|--------|
+| Free Users | 100 | 150 | ... | 3000 |
+| Freemium Users | 50 | 75 | ... | 2000 |
+| Enterprise Users | 10 | 15 | ... | 500 |
+| Total Revenue € | 5000 | 7500 | ... | 50000 |
+| Marketing € | 2000 | 2500 | ... | 8000 |
+| IT Supplier € | 1000 | 1200 | ... | 5000 |
+| Founder Wage € | 3000 | 3000 | ... | 5000 |
+| New Hire Wage € | 0 | 0 | ... | 15000 |
+
+### **Summary Sheet**
+| Metric | Value |
+|--------|-------|
+| Breakeven Month | Month 18 |
+| Lowest Cash Month | Month 12 |
+| Lowest Cash Balance € | 15000 |
+| Ending Cash Dec-28 € | 250000 |
+
+---
+
+## 🔧 Technical Architecture
+
+### **Frontend Stack**
+- **React 19.1.1** — Modern UI framework with hooks and context
+- **Vite 7.1.2** — Lightning-fast build tool and dev server
+- **TailwindCSS 4.1.13** — Utility-first CSS with custom design system
+- **Recharts 3.2.1** — Composable charting library built on D3
+
+### **Data Processing**
+- **SheetJS (xlsx)** — Client-side Excel parsing and validation
+- **Custom Data Pipeline** — Transforms Excel data into chart-ready formats
+- **Real-time Calculations** — Aggregates, percentages, and trend analysis
+
+### **Performance Optimizations**
+- **Code Splitting** — Separate chunks for React, charts, and Excel processing
+- **Component Memoization** — Optimized re-renders with React.memo
+- **Responsive Images** — Adaptive layouts for all screen sizes
+- **Bundle Analysis** — Optimized build size with manual chunk configuration
+
+---
+
+## 🌐 Deployment Options
+
+### **Render (Recommended)**
+1. Connect your GitHub repository to Render
+2. Configure build settings:
+   - **Build Command:** `npm install && npm run build`
+   - **Publish Directory:** `dist`
+3. Deploy automatically on every push
+
+### **Vercel / Netlify**
+```bash
+npm run build
+# Upload dist/ folder to your preferred static hosting
+```
+
+### **Custom Server**
+```bash
+npm run build
+# Serve dist/ folder with any static file server
+```
+
+---
+
+## 💼 Use Cases
+
+### **💰 Series A Funding**
+- Professional investor presentations
+- Financial projection visualization
+- Growth trajectory demonstration
+- Cash runway analysis
+
+### **📈 Executive Reporting**
+- Board meeting dashboards
+- Quarterly business reviews
+- Strategic planning sessions
+- Performance tracking
+
+### **👥 Stakeholder Communication**
+- Team alignment on financial goals
+- Progress tracking and milestones
+- Scenario planning and modeling
+- Investment thesis validation
+
+---
+
+## 🛠️ Customization
+
+### **Branding & Colors**
+Update the color scheme in `src/App.jsx`:
+```javascript
+const colors = {
+  revenue: '#10b981',     // Emerald green
+  marketing: '#f97316',   // Orange
+  it: '#8b5cf6',          // Purple
+  // ... customize your brand colors
+}
+
+### Feature Flags
+
+- `VITE_CHART_VARIANT` (build time): `chartjs` (default) or `recharts`.
+- URL override (runtime): add `?chart=chartjs` or `?chart=recharts` to the URL.
+- LocalStorage override (runtime): set `localStorage.chartVariant = 'chartjs'` or `'recharts'` in DevTools.
+
+Precedence: URL param → localStorage → env → default.
+```
+
+### **Chart Configuration**
+Modify chart types and styling in the respective components:
+- Area charts for trend analysis
+- Pie charts for distribution
+- Bar charts for comparative data
+- Line charts for projections
+
+### **Metric Cards**
+Add new KPIs by extending the MetricCard components with:
+- Custom icons and colors
+- Performance indicators
+- Trend arrows and percentages
+- Interactive hover effects
+
+---
+
+## 📞 Support & Contributing
+
+### **🐛 Issues**
+Found a bug or have a feature request? [Open an issue](https://github.com/fizzy2562/ConsultantCloud.io-Funding/issues)
+
+### **🤝 Contributing**
+We welcome contributions! Please read our contributing guidelines and submit pull requests.
+
+### **📧 Contact**
+For enterprise inquiries or custom implementations, reach out through the dashboard contact form.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
+<div align="center">
+
+**Built with ❤️ for Financial Analytics**
+
+[![GitHub stars](https://img.shields.io/github/stars/fizzy2562/ConsultantCloud.io-Funding?style=social)](https://github.com/fizzy2562/ConsultantCloud.io-Funding)
+[![GitHub forks](https://img.shields.io/github/forks/fizzy2562/ConsultantCloud.io-Funding?style=social)](https://github.com/fizzy2562/ConsultantCloud.io-Funding/fork)
+
+[Live Demo](https://fundingatconsultantcloud-io.onrender.com/) • [Documentation](https://github.com/fizzy2562/ConsultantCloud.io-Funding/wiki) • [Issues](https://github.com/fizzy2562/ConsultantCloud.io-Funding/issues)
+
+</div>
